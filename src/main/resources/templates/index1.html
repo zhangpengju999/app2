@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:fragment="page_head(title)">
+	<meta charset="UTF-8" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<title th:replace="${title} ?: _">首页</title>
+	<link rel="stylesheet" href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" />
+</head>
+<body>
+	<header id="header" class="navbar navbar-inverse navbar-static-top" role="navigation" th:fragment="page_header">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#hd-navbar-collapse" aria-expanded="false">
+					<span class="sr-only">切换菜单</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#" th:href="@{/}">
+					系统管理
+				</a>
+			</div>
+			<div class="collapse navbar-collapse" id="hd-navbar-collapse">
+				<!--/* 主导航 */-->
+				<ul class="nav navbar-nav">
+					<li>
+						<a href="index.html" th:href="@{/}">首页</a>
+					</li>
+					<li>
+						<a href="user/list.html" th:href="@{/users}" sec:authorize="hasRole('ROLE_ADMIN')">用户</a>
+					</li>
+				</ul>
+				<!--/* end 主导航 */-->
+				<div class="navbar-right" sec:authorize="hasRole('ROLE_USER')">
+					<!--/* 用户菜单 */-->
+					<p class="navbar-text navbar-left">欢迎 <a href="#" class="navbar-link" th:text="${#authentication.name}">User</a></p>
+					<form class="navbar-form navbar-left" th:action="@{/logout}" method="post">
+						<button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-log-out"></i> 退出</button>
+					</form>
+					<!--/* end 用户菜单 */-->
+				</div>
+			</div>
+		</div>
+	</header>
+</body>
+</html>

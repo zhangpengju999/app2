@@ -1,0 +1,21 @@
+server:
+  port: 8080
+
+spring:
+  profiles:
+    active: dev
+  thymeleaf:
+    mode: HTML
+  datasource:
+    url: jdbc:mysql://localhost/test?autoReconnect=true&amp;zeroDateTimeBehavior=convertToNull&amp;useUnicode=true&amp;characterEncoding=UTF-8
+    tomcat:
+      validationQuery: SELECT 1
+      testOnBorrow: true
+      validationInterval: 600000
+      testWhileIdle: true
+      timeBetweenEvictionRunsMillis: 50000
+      minEvictableIdleTimeMillis: 600000
+
+spring.http.multipart:
+  maxFileSize: 100Mb
+  maxRequestSize: 100Mb
