@@ -1,6 +1,8 @@
 package app.entity;
 
 import app.entity.User;
+import lombok.Data;
+
 import java.util.Date;
 
 import javax.persistence.*;
@@ -11,6 +13,7 @@ import org.springframework.format.annotation.DateTimeFormat;
  * 计费名表
  */
 @Entity
+@Data
 public class ValueItem {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -44,6 +47,14 @@ public class ValueItem {
 	
     private double purchasePrice;
     private String descStr;
+    private double divideRate;
+    
+    @ManyToOne(optional=false)
+    @JoinColumn(name="site_id",referencedColumnName="id")
+    private WebSite webSite;
+    
+    private String status;
+    
     public String getDescStr() {
 		return descStr;
 	}
