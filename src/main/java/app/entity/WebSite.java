@@ -20,7 +20,7 @@ public class WebSite {
     private Long id;
     
     @Column(name="parent_id")
-    private int parentId;
+    private Long parentId;
     
     @ManyToOne(optional = false)
     @JoinColumn(name = "channel_id", referencedColumnName = "id")
@@ -37,5 +37,63 @@ public class WebSite {
 	private String url;
 	
 	@Column(name="desc_str")
-    private String descStr;    
+    private String descStr;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public long getParentId() {
+		return parentId;
+	}
+
+	public void setParentId(long parentId) {
+		this.parentId = parentId;
+	}
+
+	public User getChannel() {
+		return channel;
+	}
+
+	public void setChannel(User channel) {
+		this.channel = channel;
+	}
+
+	public String getWebName() {
+		return webName;
+	}
+
+	public void setWebName(String webName) {
+		this.webName = webName;
+	}
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+	public String getDescStr() {
+		return descStr;
+	}
+
+	public void setDescStr(String descStr) {
+		this.descStr = descStr;
+	}    
+	
+	
 }

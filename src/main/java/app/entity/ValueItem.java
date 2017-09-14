@@ -47,7 +47,6 @@ public class ValueItem {
 	
     private double purchasePrice;
     private String descStr;
-    private double divideRate;
     
     @ManyToOne(optional=false)
     @JoinColumn(name="site_id",referencedColumnName="id")

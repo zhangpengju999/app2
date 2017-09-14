@@ -27,6 +27,7 @@ public class Task {
     private Long unitPrice;
     private int isPublic;
     private String seller;
+    private double divideRate;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "settle", referencedColumnName = "id")
