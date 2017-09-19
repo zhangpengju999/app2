@@ -82,23 +82,26 @@
 								<th>计费名ID</th>
 								<th>计费名称</th>
 								<th>任务</th>
-								<th>渠道</th>
+								<th>域名</th>
+								<th sec:authorize="hasAnyRole('ROLE_ADMIN')">渠道</th>
 								<th>上线时间</th>
 								<th>下线时间</th>
 								<th>采购单价</th>
 								<th>是否分配</th>
 								<th>备注</th>
-								<th>上传</th>
+								<th sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_DATAER')">上传</th>
 								<th>操作</th>
 							</tr>
 						</thead>
 						<tbody>
-							<tr class="odd gradeX" th:each="valueItem : ${valueItems}">
+							<tr class="odd gradeX" th:each="valueItem : ${myValueItems}">
 								<td th:text="${valueItem.id}">Trident</td>
 								<td th:text="${valueItem.itemName}"></td>
 								<td th:text="${valueItem.task.taskName}">Internet
 									 Explorer 4.0</td>
-								<td th:text="${valueItem.channel.username}"></td>
+								<td th:text="${valueItem.webSite.webName}">Internet
+									 Explorer 4.0</td>
+								<td th:text="${valueItem.channel.username}" sec:authorize="hasAnyRole('ROLE_ADMIN')"></td>
 								<td th:text="${valueItem.onLineTime}"></td>
 								<td th:text="${valueItem.downLineTime}"></td>
 								<td th:text="${valueItem.purchasePrice}"></td>

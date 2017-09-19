@@ -97,6 +97,16 @@
 			  			</div>
 			  		</div>
 			  		<div class="form-group">
+						<label for="taskId" class="control-label col-sm-3">分配域名</label>
+						<div>
+			  					<p>
+			  						<select class="selectpicker" th:field="*{webSite}" >
+										    <option th:each="webSite : ${allWebSites}" th:value="${webSite.id}" th:text="${webSite.webName}">CPS</option>
+									 </select>
+			  					</p>
+			  			</div>
+			  		</div>
+			  		<!--  <div class="form-group">
 						<label for="channelId" class="control-label col-sm-3">所属渠道</label>
 						<div>
 			  					<p>
@@ -106,6 +116,7 @@
 			  					</p>
 			  			</div>
 			  		</div>
+			  		-->
 			  		<div class="form-group">
 				  			<label for="channel" class="control-label col-sm-3">上线时间</label>
 				  			<div>
@@ -133,7 +144,7 @@
 									class="form-control" placeholder="如：10.00" />
 							</div>
 						</div>
-						<div class="form-group">
+						<div class="form-group" sec:authorize="hasAnyRole('ROLE_ADMIN')">
 							<label for="isAssigned" class="control-label col-sm-3">是否分配</label>
 							<div class="col-sm-6">
 								<input type="text" th:field="*{isAssigned}"

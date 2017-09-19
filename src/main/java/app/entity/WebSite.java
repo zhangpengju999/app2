@@ -13,14 +13,14 @@ import org.springframework.format.annotation.DateTimeFormat;
  * 计费名表
  */
 @Entity
-@Data
+@Table(name="web_site")
 public class WebSite {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     
     @Column(name="parent_id")
-    private Long parentId;
+    private Long parentId=(long) 0;
     
     @ManyToOne(optional = false)
     @JoinColumn(name = "channel_id", referencedColumnName = "id")
@@ -93,7 +93,12 @@ public class WebSite {
 
 	public void setDescStr(String descStr) {
 		this.descStr = descStr;
+	}
+
+	public void setParentId(Long parentId) {
+		this.parentId = parentId;
 	}    
+	
 	
 	
 }

@@ -9,6 +9,8 @@ import javax.validation.Valid;
 
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -50,7 +52,11 @@ public class WebSiteController {
 	@GetMapping("/webSites")
 	public String list(PageQuery query, Model model) {
 		Page<WebSite> webSites = (Page<WebSite>) WebSiteService.findAll(query);
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User currentUser = (User)auth.getPrincipal();
+		Iterable<WebSite> myWebSites = WebSiteService.findByChannelId(currentUser.getId());
 		model.addAttribute("webSites", webSites);
+		model.addAttribute("myWebSites",myWebSites);
 		return "webSite/list";
 	}
 
@@ -62,6 +68,10 @@ public class WebSiteController {
 	@PostMapping("/webSites/new")
 	public String create(@Valid @ModelAttribute("webSite") WebSite webSite, BindingResult bindingResult, Model model) {
 		if (!bindingResult.hasErrors()) {
+			webSite.setCreateTime(new Date());
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+			User currentUser = (User)auth.getPrincipal();
+			webSite.setChannel(currentUser);
 			WebSiteService.create(webSite, bindingResult);
 			if (!bindingResult.hasErrors())
 				return "redirect:/webSites";

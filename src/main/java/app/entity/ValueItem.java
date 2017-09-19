@@ -98,6 +98,18 @@ public class ValueItem {
 	public void setPurchasePrice(double purchasePrice) {
 		this.purchasePrice = purchasePrice;
 	}
+	public WebSite getWebSite() {
+		return webSite;
+	}
+	public void setWebSite(WebSite webSite) {
+		this.webSite = webSite;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
     
     
 }

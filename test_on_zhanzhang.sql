@@ -196,7 +196,7 @@ CREATE TABLE `task` (
   `settle` int(10) unsigned DEFAULT NULL,
   `creater` int(10) unsigned DEFAULT NULL,
   `desc_str` varchar(255) DEFAULT NULL,
-  `divide_rate` double DEFAULT NULL,
+  `divide_rate` double DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `task_name` (`task_name`),
   KEY `task_value_way_fk` (`value_way_id`),
@@ -214,7 +214,7 @@ CREATE TABLE `task` (
 
 LOCK TABLES `task` WRITE;
 /*!40000 ALTER TABLE `task` DISABLE KEYS */;
-INSERT INTO `task` VALUES (1,'task1',1,10000,2000,3,1,'seller1',1,1,'testtask',NULL),(2,'test3',2,10001,1111,2,0,'ceshi',2,1,'ceshistr',NULL),(3,'test4',3,10001,1000,2,0,'ceshi',2,1,'ceshistr',NULL),(4,'task5',3,1222,1111,2,0,'ceshi',1,1,'',NULL);
+INSERT INTO `task` VALUES (1,'task1',1,10000,2000,3,1,'seller1',1,1,'testtask',0),(2,'test3',2,10001,1111,2,0,'ceshi',2,1,'ceshistr',0),(3,'test4',3,10001,1000,2,0,'ceshi',2,1,'ceshistr',0),(4,'task5',3,1222,1111,2,0,'ceshi',1,1,'',0);
 /*!40000 ALTER TABLE `task` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -309,7 +309,7 @@ CREATE TABLE `value_item` (
   CONSTRAINT `channel_id_fk` FOREIGN KEY (`channel_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `fk_site_id` FOREIGN KEY (`site_id`) REFERENCES `web_site` (`id`),
   CONSTRAINT `task_id_fk` FOREIGN KEY (`task_id`) REFERENCES `task` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -318,7 +318,7 @@ CREATE TABLE `value_item` (
 
 LOCK TABLES `value_item` WRITE;
 /*!40000 ALTER TABLE `value_item` DISABLE KEYS */;
-INSERT INTO `value_item` VALUES (8,2,1,0,'valueItem212','2017-06-23','2017-07-08',22,'yy',NULL,NULL),(9,2,1,0,'valueItem23','2017-06-01','2017-06-09',22,'yy',NULL,NULL),(10,2,2,0,'valueItem23','2017-06-01','2017-06-01',22,'2017-06-01',NULL,NULL);
+INSERT INTO `value_item` VALUES (8,2,1,0,'valueItem212','2017-06-23','2017-07-08',22,'yy',3,'未结算'),(9,2,1,0,'valueItem23','2017-06-01','2017-06-09',22,'yy',3,'未结算'),(10,2,2,0,'valueItem23','2017-06-01','2017-06-01',22,'2017-06-01',3,'未结算'),(11,1,1,0,'valueItem2122','2017-09-04','2017-09-12',0,'',3,NULL);
 /*!40000 ALTER TABLE `value_item` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -365,7 +365,7 @@ CREATE TABLE `web_site` (
   PRIMARY KEY (`id`),
   KEY `channel_id_web_fk` (`channel_id`),
   CONSTRAINT `channel_id_web_fk` FOREIGN KEY (`channel_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -374,7 +374,7 @@ CREATE TABLE `web_site` (
 
 LOCK TABLES `web_site` WRITE;
 /*!40000 ALTER TABLE `web_site` DISABLE KEYS */;
-INSERT INTO `web_site` VALUES (1,0,NULL,'url1',NULL,'www.baidu.com','testurl');
+INSERT INTO `web_site` VALUES (3,0,1,'url1','2017-09-16','www.baidu.com','testurl'),(4,0,1,'url2','2017-09-19','www.qq.com','qqtest');
 /*!40000 ALTER TABLE `web_site` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -387,4 +387,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-09-14 12:22:46
+-- Dump completed on 2017-09-19 11:43:35

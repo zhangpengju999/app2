@@ -101,4 +101,10 @@ public class Task {
 	public void setDescStr(String descStr) {
 		this.descStr = descStr;
 	}
+	public double getDivideRate() {
+		return divideRate;
+	}
+	public void setDivideRate(double divideRate) {
+		this.divideRate = divideRate;
+	}
 }

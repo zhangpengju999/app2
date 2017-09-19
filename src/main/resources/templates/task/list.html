@@ -107,7 +107,7 @@
 								<td th:text="${task.settle.settleName}"></td>
 								<td th:text="${task.creater.username}"></td>
 								<td th:text="${task.descStr}"></td>
-								<td class="center" sec:authorize="hasAnyRole('ROLE_DATAER','ROLE_DATAER')">
+								<td class="center" sec:authorize="hasAnyRole('ROLE_ADMIN')">
 									<ul class="list-inline">
 										<li>
 											<a class="btn btn-xs btn-primary" href="edit.html" th:href="@{/tasks/{id}/edit(id=${task.id})}">修改</a>

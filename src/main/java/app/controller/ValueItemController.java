@@ -9,6 +9,8 @@ import javax.validation.Valid;
 
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,10 +24,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import app.entity.Task;
 import app.entity.User;
 import app.entity.ValueItem;
+import app.entity.WebSite;
 import app.service.PageQuery;
 import app.service.TaskService;
 import app.service.UserService;
 import app.service.ValueItemService;
+import app.service.WebSiteService;
 
 @Controller
 public class ValueItemController {
@@ -34,10 +38,18 @@ public class ValueItemController {
 	private TaskService taskService;
 	@Inject ValueItemService valueItemService;
 	@Inject UserService userService;
+	@Inject WebSiteService webSiteService;
 
 	@ModelAttribute("allTasks")
     public List<Task> populateValueWays() {
 		return (List<Task>) taskService.findAll();
+    }
+	
+	@ModelAttribute("allWebSites")
+    public List<WebSite> populateWebSites() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User currentUser = (User)auth.getPrincipal();
+		return (List<WebSite>) webSiteService.findByChannelId(currentUser.getId());
     }
 	
 	@ModelAttribute("allUsers")
@@ -55,7 +67,11 @@ public class ValueItemController {
 	@GetMapping("/valueItems")
 	public String list(PageQuery query, Model model) {
 		Page<ValueItem> valueItems = (Page<ValueItem>) valueItemService.findAll(query);
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User currentUser = (User)auth.getPrincipal();
+		Iterable<ValueItem> myValueItems = valueItemService.findByChannelId(currentUser.getId());
 		model.addAttribute("valueItems", valueItems);
+		model.addAttribute("myValueItems",myValueItems);
 		return "valueItem/list";
 	}
 
@@ -67,6 +83,11 @@ public class ValueItemController {
 	@PostMapping("/valueItems/new")
 	public String create(@Valid @ModelAttribute("valueItem") ValueItem valueItem, BindingResult bindingResult, Model model) {
 		if (!bindingResult.hasErrors()) {
+			if(valueItem.getChannel()==null){
+				Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+				User currentUser = (User)auth.getPrincipal();
+				valueItem.setChannel(currentUser);
+			}
 			valueItemService.create(valueItem, bindingResult);
 			if (!bindingResult.hasErrors())
 				return "redirect:/valueItems";
