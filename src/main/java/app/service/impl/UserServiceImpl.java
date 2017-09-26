@@ -64,7 +64,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	@Override
 	public User create(User user, BindingResult bindingResult) {
 		// TODO 检查用户名
-		User newUser = new User();
+		User newUser = userRepository.findByUsername(user.getUsername());
+		if(newUser == null){
+			newUser = new User();
+		}
 		newUser.setUsername(user.getUsername());
 		newUser.setPassword(passwordEncoder.encode(user.getPassword()));
 		newUser.setRealname(user.getRealname());
@@ -74,6 +77,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 		newUser.setEmail(user.getEmail());
 		newUser.setIsPublic(user.getIsPublic());
 		newUser.setPhoneNum(user.getPhoneNum());
+		newUser.setEnabled(true);
 		List<String> roles = user.getRoles();
 		if (roles != null && roles.size() > 0) {
 			for (String r : roles) {
@@ -85,10 +89,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 				}
 				newUser.addRole(role);
 			}
-			if (!newUser.hasRole(Role.USER))
-				newUser.addRole(Role.USER);
 		} else {
-			newUser.addRole(Role.USER);
+			newUser.addRole(Role.CHANNEL);
 		}
 		return userRepository.save(newUser);
 	}

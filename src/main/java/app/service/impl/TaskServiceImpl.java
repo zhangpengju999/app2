@@ -1,5 +1,7 @@
 package app.service.impl;
 
+import java.sql.Timestamp;
+
 import javax.inject.Inject;
 
 import org.springframework.data.domain.Page;
@@ -54,12 +56,17 @@ public class TaskServiceImpl implements TaskService{
 		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		User user = userRepository.findByUsernameAndEnabledTrue(userDetails.getUsername());
 		task.setCreater(user);
+		Timestamp time = new Timestamp(System.currentTimeMillis());
+		task.setCreateTime(time);
 		taskRepository.save(task);
 		return taskRepository.findFirstByOrderByIdDesc();
 	}
 
 	@Override
 	public Task update(Long id, Task task, BindingResult bindingResult) {
+		Task taskExist = taskRepository.findOne(id);
+		task.setCreater(taskExist.getCreater());
+		task.setCreateTime(taskExist.getCreateTime());
 		return taskRepository.save(task);
 	}
 

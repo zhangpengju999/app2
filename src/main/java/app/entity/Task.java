@@ -1,5 +1,8 @@
 package app.entity;
 
+import java.sql.Timestamp;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -38,6 +41,11 @@ public class Task {
     private User creater;
 
     private String descStr;
+    
+    private String system;
+    
+    @Column(name="create_time")
+    private Timestamp createTime;
 
     public void setId(Long id) {this.id = id;}
     public Long getId() {return id;}
@@ -107,4 +115,17 @@ public class Task {
 	public void setDivideRate(double divideRate) {
 		this.divideRate = divideRate;
 	}
+	public String getSystem() {
+		return system;
+	}
+	public void setSystem(String system) {
+		this.system = system;
+	}
+	public Timestamp getCreateTime() {
+		return createTime;
+	}
+	public void setCreateTime(Timestamp createTime) {
+		this.createTime = createTime;
+	}
+	
 }

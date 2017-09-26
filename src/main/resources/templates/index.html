@@ -25,7 +25,7 @@
 	           <div class="col-md-5">
 	              <!-- Logo -->
 	              <div class="logo">
-	                 <h1><a href="" th:href="@{/}">站长平台</a></h1>
+	                 <h1><a href="" th:href="@{/}">管理平台</a></h1>
 	              </div>
 	           </div>
 	           <div class="col-md-5">
@@ -68,12 +68,11 @@
 		  	<div class="sidebar content-box" style="display: block;">
                 <ul class="nav">
                     <!-- Main menu -->
-                    <!-- <li><a th:href="@{/users}" sec:authorize="hasRole('ROLE_ADMIN')"><i class="glyphicon glyphicon-list"></i> 用户管理</a></li> -->
-                    <li><a th:href="@{/tasks}"><i class="glyphicon glyphicon-list"></i> 业务列表</a></li>
+                    <li><a th:href="@{/users}" sec:authorize="hasRole('ROLE_ADMIN')"><i class="glyphicon glyphicon-list"></i> 用户管理</a></li>
+                    <li><a th:href="@{/tasks}"><i class="glyphicon glyphicon-list"></i> 任务列表</a></li>
                     <li><a th:href="@{/webSites}"><i class="glyphicon glyphicon-list"></i> 域名管理</a></li>
                     <li><a th:href="@{/valueItems}"><i class="glyphicon glyphicon-list"></i> 我的计费名</a></li>
-                    <!-- 	<li><a th:href="@{/statistic}"><i class="glyphicon glyphicon-list"></i> 任务统计</a></li>
-                     -->
+                    <li><a th:href="@{/statistic}"><i class="glyphicon glyphicon-list"></i> 任务统计</a></li>
                     <li><a th:href="@{/valueItemStatistic}"><i class="glyphicon glyphicon-list"></i> 效果报告</a></li>                    
 					<li><a th:href="@{/myincome}"><i class="glyphicon glyphicon-list"></i> 佣金记录</a></li>
 					<li><a th:href="@{/myprofile}"><i class="glyphicon glyphicon-list"></i> 我的资料</a></li>

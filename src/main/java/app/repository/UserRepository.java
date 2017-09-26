@@ -15,6 +15,8 @@ public interface UserRepository extends PagingAndSortingRepository<User, String>
 	User findByIdAndEnabledTrue(Long id);
 
 	User findByUsernameAndEnabledTrue(String username);
+	
+	User findByUsername(String username);
 
 	Collection<User> findByEnabledTrue();
 

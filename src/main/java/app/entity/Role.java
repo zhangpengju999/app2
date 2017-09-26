@@ -1,7 +1,7 @@
 package app.entity;
 
 public enum Role {
-	OPERATOR, ADMIN, USER, BD;
+	BOSS, ADMIN, OPERATOR, CHANNEL, ADFINANCIAL, CHFINANCIAL;
 
 	public String toRoleString() {
 		return User.ROLE_PREFIX + this;

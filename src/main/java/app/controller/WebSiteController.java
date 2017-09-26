@@ -57,12 +57,12 @@ public class WebSiteController {
 		Iterable<WebSite> myWebSites = WebSiteService.findByChannelId(currentUser.getId());
 		model.addAttribute("webSites", webSites);
 		model.addAttribute("myWebSites",myWebSites);
-		return "webSite/list";
+		return "website/list";
 	}
 
 	@GetMapping("/webSites/new")
 	public String create(@ModelAttribute("webSite") WebSite webSite, Model model) {
-		return "webSite/edit";
+		return "website/edit";
 	}
 
 	@PostMapping("/webSites/new")
@@ -83,7 +83,7 @@ public class WebSiteController {
 	public String edit(@PathVariable("id") Long id, Model model) {
 		WebSite webSite = WebSiteService.findById(id);
 		model.addAttribute("webSite", webSite);
-		return "webSite/edit";
+		return "website/edit";
 	}
 
 	@PostMapping("/webSites/{id}/edit")
@@ -93,12 +93,12 @@ public class WebSiteController {
 			if (!bindingResult.hasErrors())
 				return "redirect:/webSites";
 		}
-		return "webSite/edit";
+		return "website/edit";
 	}
 
 	@DeleteMapping("/webSites/{id}")
 	public String delete(@PathVariable("id") Long id) {
 		WebSiteService.delete(id);
-		return "redirect:/webSites";
+		return "redirect:/websites";
 	}
 }
