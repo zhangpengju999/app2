@@ -12,6 +12,10 @@ public interface UserService {
 	User findByUsername(String username);
 
 	Iterable<User> findAll();
+	
+	Iterable<User> findAllOperator();
+	
+	Iterable<User> findAllChannel();
 
 	Page<User> findAll(int page, int size);
 

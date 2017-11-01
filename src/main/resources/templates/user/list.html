@@ -105,7 +105,7 @@
 											<a class="btn btn-xs btn-primary" href="edit.html" th:href="@{/users/{id}/edit(id=${user.id})}">修改</a>
 										</li>
 										<li>
-											<form class="form-inline" th:method="delete" th:action="@{/users/{id}(id=${user.id})}">
+											<form class="form-inline" th:method="delete" onClick="return confirm('确认要删除？')" th:action="@{/users/{id}(id=${user.id})}">
 												<button class="btn btn-xs btn-danger">删除</button>
 											</form>
 										</li>
@@ -130,7 +130,7 @@
          <div class="container">
          
             <div class="copy text-center">
-               Copyright 2014 <a href='#'>Website</a>
+               Copyright 2017 <a href='#'>Website</a> 京ICP备17057809号
             </div>
             
          </div>

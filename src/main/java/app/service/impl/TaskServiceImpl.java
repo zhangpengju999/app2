@@ -1,6 +1,9 @@
 package app.service.impl;
 
+import java.math.BigInteger;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -49,6 +52,22 @@ public class TaskServiceImpl implements TaskService{
 	@Override
 	public Page<Task> findAll(PageQuery query) {
 		return taskRepository.findAll(query.toPageable());
+	}
+	
+	@Override
+	public List<Object> findTaskCountBySellerId(Long sellerId){
+		return taskRepository.findTaskCountBySellerId(sellerId);
+	}
+	
+	@Override
+	public Iterable<Task> findBySellerId(Long sellerId){
+		List<Task> taskList = new ArrayList<>();
+		Iterable<Object> ids = taskRepository.findTaskBySellerId(sellerId);
+		for(Object id:ids){
+			Long idNum = ((Integer)id).longValue();
+			taskList.add(taskRepository.findOne(idNum));
+		}
+		return taskList;
 	}
 
 	@Override

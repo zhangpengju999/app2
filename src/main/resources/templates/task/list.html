@@ -85,7 +85,7 @@
 								<th>点击量</th>
 								<th>销售单价</th>
 								<th>是否对公</th>
-								<th>销售方</th>
+								<th sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_BOSS','ROLE_OPERATOR','ROLE_ADFINANCIAL','ROLE_CHFINANCIAL')">销售方</th>
 								<th>结算周期</th>
 								<th>业务创建者</th>
 								<th>系统</th>
@@ -103,19 +103,19 @@
 								<td th:text="${task.clickCount}"></td>
 								<td th:text="${task.unitPrice}"></td>
 								<td th:text="${task.isPublic}"></td>
-								<td th:text="${task.seller}"></td>
+								<td sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_BOSS','ROLE_OPERATOR','ROLE_ADFINANCIAL','ROLE_CHFINANCIAL')" th:text="${task.seller.name}"></td>
 								<td th:text="${task.settle.settleName}"></td>
 								<td th:text="${task.creater.username}"></td>
 								<td th:text="${task.system}"></td>
 								<td th:text="${task.descStr}"></td>
 								<td th:text="${task.createTime}"></td>
-								<td class="center" sec:authorize="hasAnyRole('ROLE_ADMIN')">
+								<td class="center" sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_BOSS','ROLE_OPERATOR')">
 									<ul class="list-inline">
 										<li>
 											<a class="btn btn-xs btn-primary" href="edit.html" th:href="@{/tasks/{id}/edit(id=${task.id})}">修改</a>
 										</li>
 										<li>
-											<form class="form-inline" th:method="delete" th:action="@{/tasks/{id}(id=${task.id})}">
+											<form class="form-inline" th:method="delete" onClick="return confirm('确认要删除？')" th:action="@{/tasks/{id}(id=${task.id})}">
 												<button class="btn btn-xs btn-danger">删除</button>
 											</form>
 										</li>
@@ -124,7 +124,7 @@
 							</tr>
 						</tbody>
 					</table>
-					<div sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_BOSS')">
+					<div sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_BOSS','ROLE_OPERATOR')">
 						<a class="btn btn-primary pull-right" href="edit.html" th:href="@{/tasks/new}">添加</a>
 					</div>
   				</div>
@@ -140,7 +140,7 @@
          <div class="container">
          
             <div class="copy text-center">
-               Copyright 2014 <a href='#'>Website</a>
+               Copyright 2017 <a href='#'>Website</a> 京ICP备17057809号
             </div>
             
          </div>

@@ -1,5 +1,9 @@
 package app.controller;
 
+import java.util.List;
+import java.math.BigInteger;
+
+
 import javax.inject.Inject;
 import javax.validation.Valid;
 
@@ -16,16 +20,34 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import app.entity.SubTask;
 import app.entity.User;
 import app.service.PageQuery;
+import app.service.SubTaskService;
 import app.service.UserService;
+import app.service.ValueItemService;
 
 @Controller
 public class UserController {
 
 	@Inject
 	private UserService userService;
+	
+	@Inject
+	private ValueItemService ValueItemService;
 
+	@GetMapping("/channels")
+	public String listChannels(PageQuery query, Model model) {
+		List<User> users = (List<User>) userService.findAllChannel();
+		for(User user:users){
+			List<Object> valueItemCount = ValueItemService.findValueItemCountByChannelId(user.getId());
+			int num = ((BigInteger)valueItemCount.get(0)).intValue();
+			user.setNum(num);
+		}
+		model.addAttribute("channels", users);
+		return "user/listChannel";
+	}
+	
 	@GetMapping("/users")
 	public String list(PageQuery query, Model model) {
 		Page<User> users = userService.findAll(query);

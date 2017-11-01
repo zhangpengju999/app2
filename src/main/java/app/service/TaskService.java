@@ -1,5 +1,7 @@
 package app.service;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.validation.BindingResult;
 
@@ -20,6 +22,10 @@ public interface TaskService {
 	Task create(Task task, BindingResult bindingResult);
 
 	Task update(Long id, Task user, BindingResult bindingResult);
+	
+	List<Object> findTaskCountBySellerId(Long sellerId);
+	
+	Iterable<Task> findBySellerId(Long sellerId);
 
 	void delete(Long id);
 

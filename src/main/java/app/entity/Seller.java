@@ -17,6 +17,8 @@ public class Seller {
 
     private String name;
     
+    private String info;
+    
     @Transient
     int num = 0;
 
@@ -43,7 +45,12 @@ public class Seller {
 	public void setNum(int num) {
 		this.num = num;
 	}
-	
-	
-    
+
+	public String getInfo() {
+		return info;
+	}
+
+	public void setInfo(String info) {
+		this.info = info;
+	}
 }

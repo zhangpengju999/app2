@@ -1,11 +1,18 @@
 package app.service.impl;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import javax.inject.Inject;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
+
+import app.entity.SubTask;
+import app.entity.User;
 import app.entity.ValueItem;
-import app.repository.StatisticRepository;
-import app.repository.ValueItemRepository;
+import app.repository.ChannelStatisticRepository;
+import app.repository.*;
 import app.service.PageQuery;
 import app.service.ValueItemService;
 
@@ -13,7 +20,8 @@ import app.service.ValueItemService;
 public class ValueItemServiceImpl implements ValueItemService{
 	
 	@Inject ValueItemRepository valueItemRepository; 
-	@Inject StatisticRepository statisticRepository;
+	@Inject ChannelStatisticRepository statisticRepository;
+	@Inject UserRepository userRepository;  
 	
 	@Override
 	public Iterable<ValueItem> findAll(){
@@ -26,13 +34,74 @@ public class ValueItemServiceImpl implements ValueItemService{
 	}
 	
 	@Override
-	public ValueItem findById(Long id){
-		return valueItemRepository.findOne(id);
+	public  List<Object> findValueItemCountByChannelId(Long id){
+		return valueItemRepository.findCountByChannelId(id);
 	}
 	
 	@Override
-	public Iterable<ValueItem> findByTaskId(Long id){
-		return valueItemRepository.findByTaskId(id);
+	public Iterable<ValueItem> findValueItemByChannelId(Long id){
+		List<ValueItem> valueItemList = new ArrayList<>();
+		Iterable<Object> ids = valueItemRepository.findIdsByChannelId(id);
+		for(Object i:ids){
+			Long idNum = ((Integer)i).longValue();
+			valueItemList.add(valueItemRepository.findOne(idNum));
+		}
+		return valueItemList;
+	} 
+	
+	@Override
+	public ValueItem findById(Long id){
+		return valueItemRepository.getOne(id);
+	}
+	
+	@Override
+	public Iterable<ValueItem> findBySubTaskId(Long id){
+		return valueItemRepository.findBySubTaskId(id);
+	}
+	
+	@Override
+	public ValueItem findCurrentValueItemBySubTaskIdAndDate(Long id, Date date){
+		ValueItem currentValueItem=null;
+		Iterable<Object> ids = valueItemRepository.findCurrentValueItemIdBySubTaskIdAndDate(id, date);
+		Iterable<ValueItem> valueItems = valueItemRepository.findAll();
+		List<ValueItem> valueItemList = new ArrayList<>();
+		for(Object i:ids){
+			Long idNum = ((Integer)i).longValue();
+			valueItemList.add(valueItemRepository.findOne(idNum));
+		}
+		if(valueItemList.size()>0){
+			currentValueItem = valueItemList.get(0);
+		}
+		return currentValueItem;
+	}
+	
+	@Override
+	public ValueItem findCurrentValueItemBySubTaskIdAndChannelName(Long id, String channelName){
+		ValueItem currentValueItem=null;
+		User channel = userRepository.findByUsername(channelName);
+		Iterable<Object> ids = valueItemRepository.findCurrentValueItemIdBySubTaskIdAndChannelName(id, channel.getId());
+		Iterable<ValueItem> valueItems = valueItemRepository.findAll();
+		List<ValueItem> valueItemList = new ArrayList<>();
+		for(Object i:ids){
+			Long idNum = ((Integer)i).longValue();
+			valueItemList.add(valueItemRepository.findOne(idNum));
+		}
+		if(valueItemList.size()>0){
+			currentValueItem = valueItemList.get(0);
+		}
+		return currentValueItem;
+	}
+	
+	@Override
+	public List<ValueItem> findCurrentValueItemBySubTaskId(Long id){
+		List<ValueItem> valueItemList = new ArrayList<>();
+		Iterable<Object> ids = valueItemRepository.findCurrentValueItemBySubTaskId(id);
+		Iterable<ValueItem> valueItems = valueItemRepository.findAll();
+		for(Object i:ids){
+			Long idNum = ((Integer)i).longValue();
+			valueItemList.add(valueItemRepository.findOne(idNum));
+		}
+		return valueItemList;
 	}
 	
 	@Override

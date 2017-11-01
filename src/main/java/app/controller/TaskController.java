@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import app.entity.Settle;
 import app.entity.Task;
 import app.entity.ValueWay;
+import app.entity.Seller;
 import app.service.PageQuery;
+import app.service.SellerService;
 import app.service.SettleService;
 import app.service.TaskService;
 import app.service.ValueWayService;
@@ -31,6 +33,7 @@ public class TaskController {
 	@Inject
 	private ValueWayService valueWayService;
 	@Inject SettleService settleService;
+	@Inject SellerService sellerService;
 
 	@ModelAttribute("allValueWays")
     public List<ValueWay> populateValueWays() {
@@ -42,9 +45,21 @@ public class TaskController {
 		return (List<Settle>) settleService.findAll();
 	}
 	
+	@ModelAttribute("allSellers")
+	public List<Seller> populateSellers(){
+		return (List<Seller>) sellerService.findAll();
+	}
+	
 	@GetMapping("/tasks")
 	public String list(PageQuery query, Model model) {
 		Page<Task> tasks = taskService.findAll(query);
+		model.addAttribute("tasks", tasks);
+		return "task/list";
+	}
+	
+	@GetMapping("/tasks/{sellerId}")
+	public String listSeller(@PathVariable("sellerId") Long sellerId, Model model) {
+		Iterable<Task> tasks = taskService.findBySellerId(sellerId);
 		model.addAttribute("tasks", tasks);
 		return "task/list";
 	}

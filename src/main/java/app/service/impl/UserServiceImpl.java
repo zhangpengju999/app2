@@ -1,5 +1,6 @@
 package app.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -60,6 +61,30 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	public Page<User> findAll(PageQuery query) {
 		return userRepository.findByEnabledTrue(query.toPageable());
 	}
+	
+	@Override
+	public Iterable<User> findAllOperator(){
+		Iterable<User> allUser = userRepository.findByEnabledTrue();
+		List<User> res = new ArrayList<>();
+		for(User user:allUser){
+			if(user.hasRole(Role.OPERATOR)){
+				res.add(user);
+			}
+		}
+		return res;
+	}
+	
+	@Override
+	public Iterable<User> findAllChannel(){
+		Iterable<User> allUser = userRepository.findByEnabledTrue();
+		List<User> res = new ArrayList<>();
+		for(User user:allUser){
+			if(user.hasRole(Role.CHANNEL)){
+				res.add(user);
+			}
+		}
+		return res;
+	}
 
 	@Override
 	public User create(User user, BindingResult bindingResult) {
@@ -90,7 +115,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 				newUser.addRole(role);
 			}
 		} else {
-			newUser.addRole(Role.CHANNEL);
+			//newUser.addRole(Role.CHANNEL);
 		}
 		return userRepository.save(newUser);
 	}

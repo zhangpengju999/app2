@@ -20,12 +20,16 @@ public class ValueItem {
     private Long id;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "task_id", referencedColumnName = "id")
-    private Task task;
+    @JoinColumn(name = "sub_task_id", referencedColumnName = "id")
+    private SubTask subTask;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "channel_id", referencedColumnName = "id")
     private User channel;
+    
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "value_way_id", referencedColumnName = "id")
+    private ValueWay valueWay;
 
     @Column(name="is_assigned")
     private int isAssigned;
@@ -54,6 +58,12 @@ public class ValueItem {
     
     private String status;
     
+    @Transient
+    private Seller seller;
+    
+    @Transient
+    private Task task;
+    
     public String getDescStr() {
 		return descStr;
 	}
@@ -62,11 +72,12 @@ public class ValueItem {
 	}
 	public void setId(Long id) {this.id = id;}
     public Long getId() {return id;}
-	public Task getTask() {
-		return task;
+	
+	public SubTask getSubTask() {
+		return subTask;
 	}
-	public void setTask(Task task) {
-		this.task = task;
+	public void setSubTask(SubTask subTask) {
+		this.subTask = subTask;
 	}
 	public User getChannel() {
 		return channel;
@@ -109,6 +120,24 @@ public class ValueItem {
 	}
 	public void setStatus(String status) {
 		this.status = status;
+	}
+	public ValueWay getValueWay() {
+		return valueWay;
+	}
+	public void setValueWay(ValueWay valueWay) {
+		this.valueWay = valueWay;
+	}
+	public Seller getSeller() {
+		return seller;
+	}
+	public void setSeller(Seller seller) {
+		this.seller = seller;
+	}
+	public Task getTask() {
+		return task;
+	}
+	public void setTask(Task task) {
+		this.task = task;
 	}
     
     

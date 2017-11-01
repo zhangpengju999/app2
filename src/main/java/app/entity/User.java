@@ -72,6 +72,9 @@ public class User implements UserDetails {
 
 	@Transient
 	private List<String> roles;
+	
+	@Transient
+	private int num = 0;
 
 	public Long getId() {
 		return id;
@@ -224,6 +227,14 @@ public class User implements UserDetails {
 
 	public void setIsPublic(int isPublic) {
 		this.isPublic = isPublic;
+	}
+
+	public int getNum() {
+		return num;
+	}
+
+	public void setNum(int num) {
+		this.num = num;
 	}
 	
 	

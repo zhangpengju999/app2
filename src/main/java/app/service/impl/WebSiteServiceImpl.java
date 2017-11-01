@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import app.entity.ValueItem;
 import app.entity.WebSite;
-import app.repository.StatisticRepository;
+import app.repository.ChannelStatisticRepository;
 import app.repository.ValueItemRepository;
 import app.repository.WebSiteRepository;
 import app.service.PageQuery;
@@ -16,7 +16,7 @@ import app.service.WebSiteService;
 public class WebSiteServiceImpl implements WebSiteService{
 	
 	@Inject WebSiteRepository webSiteRepository; 
-	@Inject StatisticRepository statisticRepository;
+	@Inject ChannelStatisticRepository statisticRepository;
 	
 	@Override
 	public Iterable<WebSite> findAll(){

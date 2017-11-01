@@ -80,7 +80,7 @@
 			<div class="col-md-10">
 				<form class="form-horizontal" method="post" th:object="${valueItem}">
 					<div class="form-group">
-						<label for="taskName" class="control-label col-sm-3">计费名称</label>
+						<label for="itemName" class="control-label col-sm-3">计费名称</label>
 						<div class="col-sm-6">
 							<input type="text" th:field="*{itemName}" class="form-control"
 								placeholder="计费名称" required autofocus />
@@ -90,13 +90,19 @@
 						<label for="taskId" class="control-label col-sm-3">所属任务</label>
 						<div>
 			  					<p>
-			  						<select class="selectpicker" th:field="*{task}" >
-										    <option th:each="task : ${allTasks}" th:value="${task.id}" th:text="${task.taskName}">CPS</option>
+			  						<select id="seller" class="selectpicker" th:field="*{seller}" >
+										    <option th:each="seller : ${allSellers}" th:value="${seller.id}" th:text="${seller.name}">CPS</option>
+									 </select>
+									 <select id="task" class="selectpicker" th:field="*{task}" >
+										    <option value="0">--</option>
+									 </select>
+									 <select id="subTask" class="selectpicker" th:field="*{subTask}" >
+										    <option value="0">--</option>
 									 </select>
 			  					</p>
 			  			</div>
 			  		</div>
-			  		<div class="form-group">
+			  		<!-- <div class="form-group">
 						<label for="taskId" class="control-label col-sm-3">分配域名</label>
 						<div>
 			  					<p>
@@ -105,18 +111,17 @@
 									 </select>
 			  					</p>
 			  			</div>
-			  		</div>
-			  		<!--  <div class="form-group">
+			  		</div> -->
+			  		<div class="form-group">
 						<label for="channelId" class="control-label col-sm-3">所属渠道</label>
 						<div>
 			  					<p>
 			  						<select class="selectpicker" th:field="*{channel.id}" >
-										    <option th:each="channel : ${allUsers}" th:value="${channel.id}" th:text="${channel.username}">CPS</option>
+										    <option th:each="channel : ${allChannels}" th:value="${channel.id}" th:text="${channel.username}">CPS</option>
 									 </select>
 			  					</p>
 			  			</div>
 			  		</div>
-			  		-->
 			  		<div class="form-group">
 				  			<label for="channel" class="control-label col-sm-3">上线时间</label>
 				  			<div>
@@ -138,19 +143,23 @@
 				  			</div>
 			  		</div>
 						<div class="form-group">
+						<label for="valueWayId" class="control-label col-sm-3">计费方式</label>
+							<div>
+			  					<p>
+			  						<select class="selectpicker" th:field="*{valueWay}" >
+										    <option th:each="valueWay : ${allValueWays}" th:value="${valueWay.id}" th:text="${valueWay.valueWayName}">CPS</option>
+									 </select>
+			  					</p>
+			  			 	</div>
+			  			</div>
+						<div class="form-group">
 							<label for="clickCount" class="control-label col-sm-3">采购单价</label>
 							<div class="col-sm-6">
 								<input type="text" th:field="*{purchasePrice}"
-									class="form-control" placeholder="如：10.00" />
+									class="form-control" placeholder="CPA或CPC请输入单价，如：1.01。CPS请输入比例，如0.2（代表20%）" />
 							</div>
 						</div>
-						<div class="form-group" sec:authorize="hasAnyRole('ROLE_ADMIN')">
-							<label for="isAssigned" class="control-label col-sm-3">是否分配</label>
-							<div class="col-sm-6">
-								<input type="text" th:field="*{isAssigned}"
-									class="form-control" placeholder="已分配则输入：1，未分配则输入：0" />
-							</div>
-						</div>
+						
 					<div class="form-group">
 							<label for="descStr" class="control-label col-sm-3">备注</label>
 							<div class="col-sm-6">
@@ -175,18 +184,22 @@
 		<div class="container">
 
 			<div class="copy text-center">
-				Copyright 2014 <a href='#'>Website</a>
+				Copyright 2017 <a href='#'>Website</a> 京ICP备17057809号
 			</div>
 
 		</div>
 	</footer>
 
+	
 	<link href="vendors/datatables/dataTables.bootstrap.css" rel="stylesheet" media="screen" th:href="@{/vendors/datatables/dataTables.bootstrap.css}">
 	<link href="vendors/form-helpers/css/bootstrap-formhelpers.min.css" rel="stylesheet" 
 	th:href="@{/vendors/form-helpers/css/bootstrap-formhelpers.min.css}">
 
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 	<script src="js/jquery.min.js" th:src="@{/js/jquery.min.js}"></script>
+	<!-- jQuery chaine (necessary for Bootstrap's JavaScript plugins) -->
+	<script src="js/jquery.chained.js" th:src="@{/js/jquery.chained.js}"></script>
+	<script src="js/jquery.chained.remote.min.js" th:src="@{/js/jquery.chained.remote.min.js}"></script>
 	<!-- jQuery UI -->
 	<script src="js/jquery-ui.js" th:src="@{/js/jquery-ui.js}"></script>
 	<!-- Include all compiled plugins (below), or include individual files as needed -->
@@ -200,5 +213,15 @@
 	<script src="js/tables.js" th:src="@{/js/tables.js}"></script>
 	<script src="js/bootstrap-datepicker.min.js" th:src="@{/js/bootstrap-datepicker.min.js}"></script>
 	<script src="js/bootstrap-datepicker.pt-BR.min.js" th:src="@{/js/bootstrap-datepicker.pt-BR.min.js}"></script>
+	<script type="text/javascript">
+	$("#task").remoteChained({
+        parents: "#seller",
+        url: "[[@{/valueItems/task/seller}]]"
+    });
+	$("#subTask").remoteChained({
+        parents: "#task",
+        url: "[[@{/valueItems/subTask/task}]]"
+    });
+	</script>
 </body>
 </html>

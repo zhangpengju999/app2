@@ -7,18 +7,21 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "statistic")
-public class Statistic {
+@Table(name = "channel_settle")
+public class ChannelSettle {
 	
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 	
-	@Column(name = "value_item_id")
-	Long valueItemId;
+	@ManyToOne(optional = false)
+    @JoinColumn(name = "value_item_id", referencedColumnName = "id")
+	ValueItem valueItem;
 	
 	@Column(name = "show_count")
 	Long showCount;
@@ -35,8 +38,14 @@ public class Statistic {
 	@Column(name = "income")
 	double income;
 	
-	@Column(name = "date")
-	Date date;
+	@Column(name = "year")
+	Long year;
+	
+	@Column(name = "month")
+	Long month;
+	
+	@Column(name="deduct_rate")
+	double deductRate=0.2;
 
 	public Long getId() {
 		return id;
@@ -46,13 +55,7 @@ public class Statistic {
 		this.id = id;
 	}
 
-	public Long getValueItemId() {
-		return valueItemId;
-	}
-
-	public void setValueItemId(Long valueItemId) {
-		this.valueItemId = valueItemId;
-	}
+	
 
 	public Long getShowCount() {
 		return showCount;
@@ -94,12 +97,36 @@ public class Statistic {
 		this.income = income;
 	}
 
-	public Date getDate() {
-		return date;
+	public double getDeductRate() {
+		return deductRate;
 	}
 
-	public void setDate(Date date) {
-		this.date = date;
+	public void setDeductRate(double deductRate) {
+		this.deductRate = deductRate;
+	}
+
+	public ValueItem getValueItem() {
+		return valueItem;
+	}
+
+	public void setValueItem(ValueItem valueItem) {
+		this.valueItem = valueItem;
+	}
+
+	public Long getYear() {
+		return year;
+	}
+
+	public void setYear(Long year) {
+		this.year = year;
+	}
+
+	public Long getMonth() {
+		return month;
+	}
+
+	public void setMonth(Long month) {
+		this.month = month;
 	}
 	
 	

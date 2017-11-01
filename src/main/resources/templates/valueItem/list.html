@@ -81,33 +81,35 @@
 							<tr>
 								<th>计费名ID</th>
 								<th>计费名称</th>
-								<th>任务</th>
-								<th>域名</th>
+								<th>任务名称</th>
+								<th>URL</th>
 								<th sec:authorize="hasAnyRole('ROLE_ADMIN')">渠道</th>
 								<th>上线时间</th>
 								<th>下线时间</th>
+								<th>计费方式</th>
 								<th>采购单价</th>
-								<th>是否分配</th>
+								<!-- <th>是否分配</th> -->
 								<th>备注</th>
-								<th sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_DATAER')">上传</th>
+								<!-- <th sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_DATAER')">上传</th> -->
 								<th>操作</th>
 							</tr>
 						</thead>
 						<tbody>
-							<tr class="odd gradeX" th:each="valueItem : ${myValueItems}">
+							<tr class="odd gradeX" th:each="valueItem : ${valueItems}">
 								<td th:text="${valueItem.id}">Trident</td>
 								<td th:text="${valueItem.itemName}"></td>
-								<td th:text="${valueItem.task.taskName}">Internet
+								<td th:text="${valueItem.subTask.parent.taskName}">Internet
 									 Explorer 4.0</td>
-								<td th:text="${valueItem.webSite.webName}">Internet
+								<td th:text="${valueItem.subTask.url}">Internet
 									 Explorer 4.0</td>
 								<td th:text="${valueItem.channel.username}" sec:authorize="hasAnyRole('ROLE_ADMIN')"></td>
 								<td th:text="${valueItem.onLineTime}"></td>
 								<td th:text="${valueItem.downLineTime}"></td>
+								<td th:text="${valueItem.valueWay.valueWayName}"></td>
 								<td th:text="${valueItem.purchasePrice}"></td>
-								<td th:text="${valueItem.isAssigned}"></td>
+								<!-- <td th:text="${valueItem.isAssigned}"></td> -->
 								<td th:text="${valueItem.descStr}"></td>
-								<td sec:authorize="hasAnyRole('ROLE_DATAER','ROLE_DATAER')">
+								<!-- <td sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_BOSS')">
 									<ul class="list-inline">
 										<li>
 											<form class="form-inline" th:method="post" enctype="multipart/form-data"  th:action="@{/valueItems/{id}/upload(id=${valueItem.id})}">
@@ -118,14 +120,14 @@
 											</form>
 										</li>
 									</ul>
-								</td>
-								<td class="center" sec:authorize="hasAnyRole('ROLE_DATAER','ROLE_DATAER')">
+								</td> -->
+								<td class="center" sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_BOSS','ROLE_OPERATOR')">
 									<ul class="list-inline">
 										<li>
 											<a class="btn btn-xs btn-primary" href="edit.html" th:href="@{/valueItems/{id}/edit(id=${valueItem.id})}">修改</a>
 										</li>
 										<li>
-											<form class="form-inline" th:method="delete" th:action="@{/valueItems/{id}(id=${valueItem.id})}">
+											<form class="form-inline" th:method="delete" onClick="return confirm('确认要删除？')" th:action="@{/valueItems/{id}(id=${valueItem.id})}">
 												<button class="btn btn-xs btn-danger">删除</button>
 											</form>
 										</li>
@@ -134,7 +136,7 @@
 							</tr>
 						</tbody>
 					</table>
-					<div sec:authorize="hasAnyRole('ROLE_DATAER','ROLE_DATAER')">
+					<div sec:authorize="hasAnyRole('ROLE_BOSS','ROLE_ADMIN','ROLE_OPERATOR')">
 						<a class="btn btn-primary pull-right" href="edit.html" th:href="@{/valueItems/new}">添加</a>
 					</div>
   				</div>
@@ -150,7 +152,7 @@
          <div class="container">
          
             <div class="copy text-center">
-               Copyright 2014 <a href='#'>Website</a>
+               Copyright 2017 <a href='#'>Website</a> 京ICP备17057809号
             </div>
             
          </div>

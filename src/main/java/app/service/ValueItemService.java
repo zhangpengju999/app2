@@ -1,6 +1,11 @@
 package app.service;
 
+import java.util.Date;
+import java.util.List;
+
 import org.springframework.validation.BindingResult;
+
+import app.entity.SubTask;
 import app.entity.ValueItem;
 
 public interface ValueItemService {
@@ -11,7 +16,17 @@ public interface ValueItemService {
 	
 	ValueItem findById(Long id);
 	
-	Iterable<ValueItem> findByTaskId(Long id);
+	List<Object> findValueItemCountByChannelId(Long id);
+	
+	Iterable<ValueItem> findValueItemByChannelId(Long id);
+	
+	List<ValueItem> findCurrentValueItemBySubTaskId(Long id);
+	
+	ValueItem findCurrentValueItemBySubTaskIdAndDate(Long id, Date date);
+	
+	ValueItem findCurrentValueItemBySubTaskIdAndChannelName(Long id, String channelName);
+	
+	Iterable<ValueItem> findBySubTaskId(Long id);
 	
 	Iterable<ValueItem> findByChannelId(Long id);
 	

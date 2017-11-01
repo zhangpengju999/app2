@@ -27,9 +27,13 @@ public class Task {
 
     private Long showCount;
     private Long clickCount;
-    private Long unitPrice;
+    private double unitPrice;
     private int isPublic;
-    private String seller;
+    
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "seller", referencedColumnName = "id")
+    private Seller seller;
+    
     private double divideRate;
 
     @ManyToOne(optional = false)
@@ -73,22 +77,18 @@ public class Task {
 	public void setClickCount(Long clickCount) {
 		this.clickCount = clickCount;
 	}
-	public Long getUnitPrice() {
-		return unitPrice;
-	}
-	public void setUnitPrice(Long unitPrice) {
-		this.unitPrice = unitPrice;
-	}
+
 	public int getIsPublic() {
 		return isPublic;
 	}
 	public void setIsPublic(int isPublic) {
 		this.isPublic = isPublic;
 	}
-	public String getSeller() {
+	
+	public Seller getSeller() {
 		return seller;
 	}
-	public void setSeller(String seller) {
+	public void setSeller(Seller seller) {
 		this.seller = seller;
 	}
 	public Settle getSettle() {
@@ -126,6 +126,12 @@ public class Task {
 	}
 	public void setCreateTime(Timestamp createTime) {
 		this.createTime = createTime;
+	}
+	public double getUnitPrice() {
+		return unitPrice;
+	}
+	public void setUnitPrice(double unitPrice) {
+		this.unitPrice = unitPrice;
 	}
 	
 }

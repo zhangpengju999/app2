@@ -4,15 +4,15 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import app.entity.Statistic;
+import app.entity.ChannelStatistic;
 
-public interface StatisticService {
+public interface ChannelStatisticService {
 
-	Statistic findById(Long id);
+	ChannelStatistic findById(Long id);
 	
-	Statistic create(Statistic statistic);
+	ChannelStatistic create(ChannelStatistic statistic);
 	
-	void store(Long id,MultipartFile file) throws Exception;
+	void store(MultipartFile file) throws Exception;
 	
 	List<Object[]> findByUsername(Long id);
 	
@@ -21,4 +21,6 @@ public interface StatisticService {
 	List<Object[]> findAllTaskStatistics();
 	
 	List<Object[]> findAllValueItemStatistics();
+	
+	List<ChannelStatistic> findALl();
 }
