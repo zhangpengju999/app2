@@ -15,6 +15,18 @@ public interface ValueItemRepository extends JpaRepository<ValueItem, Long>{
     Iterable<ValueItem> findBySubTaskId(Long id);
     Iterable<ValueItem> findByChannelId(Long id);
     
+    @Query(value = "select * from value_item where channel_id = :id and (date(down_line_time)>=curdate() or down_line_time is null)", nativeQuery = true)
+    Iterable<ValueItem> findByChannelIdOn(Long id);
+    
+    @Query(value = "select * from value_item where channel_id = :id and date(down_line_time)<curdate()", nativeQuery = true)
+    Iterable<ValueItem> findByChannelIdDown(Long id);
+    
+    @Query(value = "select * from value_item where date(down_line_time)>=curdate() or down_line_time is null", nativeQuery = true)
+    Iterable<ValueItem> findAllOn();
+    
+    @Query(value = "select * from value_item where date(down_line_time)<curdate()", nativeQuery = true)
+    Iterable<ValueItem> findAllDown();
+    
     @Query(value = "select count(1) from value_item where channel_id = :id", nativeQuery = true)
     List<Object> findCountByChannelId(@Param("id") Long id);
     

@@ -68,19 +68,39 @@ public class SubTaskController {
 	                         new CustomDateEditor(new SimpleDateFormat("dd/MM/yyyy"), true, 10));   
 	}
 	
-	@GetMapping("/subTasks")
-	public String list(Model model) {
-		Iterable<SubTask> subTasks = subTaskService.findAll();
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		User currentUser = (User)auth.getPrincipal();
-		//Iterable<ValueItem> myValueItems = subTaskService.findByChannelId(currentUser.getId());
+	@GetMapping("/subTasksOn")
+	public String listOn(Model model){
+		Iterable<SubTask> subTasks = subTaskService.findAllOn();
 		for(SubTask subTask:subTasks){
 			List<ValueItem> currentValueItems = valueItemService.findCurrentValueItemBySubTaskId(subTask.getId());
 			if(currentValueItems!=null && currentValueItems.size()>0)
 				subTask.setCurrentValueItem(currentValueItems.get(0));
 		}
 		model.addAttribute("subTasks", subTasks);
-		//model.addAttribute("myValueItems",myValueItems);
+		return "subtask/list";
+	}
+	
+	@GetMapping("/subTasksDown")
+	public String listDown(Model model){
+		Iterable<SubTask> subTasks = subTaskService.findAllDown();
+		for(SubTask subTask:subTasks){
+			List<ValueItem> currentValueItems = valueItemService.findCurrentValueItemBySubTaskId(subTask.getId());
+			if(currentValueItems!=null && currentValueItems.size()>0)
+				subTask.setCurrentValueItem(currentValueItems.get(0));
+		}
+		model.addAttribute("subTasks", subTasks);
+		return "subtask/list";
+	}
+	
+	@GetMapping("/subTasks")
+	public String list(Model model) {
+		Iterable<SubTask> subTasks = subTaskService.findAll();
+		for(SubTask subTask:subTasks){
+			List<ValueItem> currentValueItems = valueItemService.findCurrentValueItemBySubTaskId(subTask.getId());
+			if(currentValueItems!=null && currentValueItems.size()>0)
+				subTask.setCurrentValueItem(currentValueItems.get(0));
+		}
+		model.addAttribute("subTasks", subTasks);
 		return "subtask/list";
 	}
 

@@ -29,6 +29,16 @@ public class ValueItemServiceImpl implements ValueItemService{
 	}
 	
 	@Override
+	public Iterable<ValueItem> findAllOn(){
+		return valueItemRepository.findAllOn();
+	}
+	
+	@Override
+	public Iterable<ValueItem> findAllDown(){
+		return valueItemRepository.findAllDown();
+	}
+	
+	@Override
 	public Iterable<ValueItem> findAll(PageQuery query){
 		return valueItemRepository.findAll(query.toPageable());
 	}
@@ -109,6 +119,15 @@ public class ValueItemServiceImpl implements ValueItemService{
 		return valueItemRepository.findByChannelId(id);
 	}
 	
+	@Override
+	public Iterable<ValueItem> findByChannelIdOn(Long id){
+		return valueItemRepository.findByChannelIdOn(id);
+	}
+	
+	@Override
+	public Iterable<ValueItem> findByChannelIdDown(Long id){
+		return valueItemRepository.findByChannelIdDown(id);
+	}
 	
 	@Override
 	public ValueItem create(ValueItem valueItem, BindingResult bindingResult){

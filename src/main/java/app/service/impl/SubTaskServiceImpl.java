@@ -31,6 +31,16 @@ public class SubTaskServiceImpl implements SubTaskService{
 	}
 	
 	@Override
+	public Iterable<SubTask> findAllOn(){
+		return subTaskRepository.findAllOn();
+	}
+	
+	@Override
+	public Iterable<SubTask> findAllDown(){
+		return subTaskRepository.findAllDown();
+	}
+	
+	@Override
 	public Iterable<SubTask> findAll(PageQuery query){
 		return subTaskRepository.findAll(query.toPageable());
 	}

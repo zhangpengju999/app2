@@ -12,6 +12,10 @@ public interface ValueItemService {
 
 	Iterable<ValueItem> findAll();
 	
+	Iterable<ValueItem> findAllOn();
+	
+	Iterable<ValueItem> findAllDown();
+	
 	Iterable<ValueItem> findAll(PageQuery query);
 	
 	ValueItem findById(Long id);
@@ -29,6 +33,10 @@ public interface ValueItemService {
 	Iterable<ValueItem> findBySubTaskId(Long id);
 	
 	Iterable<ValueItem> findByChannelId(Long id);
+	
+	Iterable<ValueItem> findByChannelIdOn(Long id);
+	
+	Iterable<ValueItem> findByChannelIdDown(Long id);
 	
 	ValueItem create(ValueItem valueItem, BindingResult bindingResult);
 	ValueItem update(Long id, ValueItem valueItem, BindingResult bindingResult);

@@ -15,4 +15,10 @@ public interface SubTaskRepository extends JpaRepository<SubTask, Long>{
     
     Iterable<SubTask> findByName(String name);
     
+    @Query(value = "select * from sub_task where date(down_line_time)>=curdate() or down_line_time is null", nativeQuery = true)
+    Iterable<SubTask> findAllOn();
+    
+    @Query(value = "select * from sub_task where date(down_line_time)<curdate()", nativeQuery = true)
+    Iterable<SubTask> findAllDown();
+    
 }

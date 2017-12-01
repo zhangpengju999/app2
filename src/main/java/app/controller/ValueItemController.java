@@ -129,6 +129,36 @@ public class ValueItemController {
 	                         new CustomDateEditor(new SimpleDateFormat("dd/MM/yyyy"), true, 10));   
 	}
 	
+	@GetMapping("/valueItemsOn")
+	public String listOn(Model model) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User currentUser = (User)auth.getPrincipal();
+		Iterable<ValueItem> valueItems;
+		if(currentUser.hasRole(Role.CHANNEL)){
+			valueItems = valueItemService.findByChannelIdOn(currentUser.getId());
+		}else{
+			valueItems = valueItemService.findAllOn();
+		}
+		ValueItem one = valueItemService.findById(new Long(12));
+		model.addAttribute("valueItems",valueItems);
+		return "valueItem/list";
+	}
+	
+	@GetMapping("/valueItemsDown")
+	public String listDown(Model model) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User currentUser = (User)auth.getPrincipal();
+		Iterable<ValueItem> valueItems;
+		if(currentUser.hasRole(Role.CHANNEL)){
+			valueItems = valueItemService.findByChannelIdDown(currentUser.getId());
+		}else{
+			valueItems = valueItemService.findAllDown();
+		}
+		ValueItem one = valueItemService.findById(new Long(12));
+		model.addAttribute("valueItems",valueItems);
+		return "valueItem/list";
+	}
+	
 	@GetMapping("/valueItems")
 	public String list(Model model) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -140,7 +170,6 @@ public class ValueItemController {
 			valueItems = valueItemService.findAll();
 		}
 		ValueItem one = valueItemService.findById(new Long(12));
-		
 		model.addAttribute("valueItems",valueItems);
 		return "valueItem/list";
 	}

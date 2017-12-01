@@ -10,6 +10,10 @@ public interface SubTaskService {
 
 	Iterable<SubTask> findAll();
 	
+	Iterable<SubTask> findAllOn();
+	
+	Iterable<SubTask> findAllDown();
+	
 	Iterable<SubTask> findAll(PageQuery query);
 	
 	SubTask findById(Long id);
