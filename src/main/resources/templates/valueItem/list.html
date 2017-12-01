@@ -88,7 +88,7 @@
 								<th>下线时间</th>
 								<th>计费方式</th>
 								<th>采购单价</th>
-								<!-- <th>是否分配</th> -->
+								<th>分成比例</th>
 								<th>备注</th>
 								<!-- <th sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_DATAER')">上传</th> -->
 								<th>操作</th>
@@ -107,7 +107,7 @@
 								<td th:text="${valueItem.downLineTime}"></td>
 								<td th:text="${valueItem.valueWay.valueWayName}"></td>
 								<td th:text="${valueItem.purchasePrice}"></td>
-								<!-- <td th:text="${valueItem.isAssigned}"></td> -->
+								<td th:text="${valueItem.divideRate?.name}"></td>
 								<td th:text="${valueItem.descStr}"></td>
 								<!-- <td sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_BOSS')">
 									<ul class="list-inline">
@@ -172,6 +172,6 @@
     <script src="vendors/datatables/dataTables.bootstrap.js"></script>
 
     <script src="js/custom.js" th:src="@{js/custom.js}"></script>
-    <script src="js/tables.js" th:src="@{js/tables/js}"></script>
+    <script src="js/tables.js" th:src="@{js/tables.js}"></script>
   </body>
 </html>

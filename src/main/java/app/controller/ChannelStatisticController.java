@@ -1,5 +1,7 @@
 package app.controller;
 
+import java.nio.channels.Channel;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -9,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,9 +19,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import app.entity.ChannelStatistic;
+import app.entity.Role;
 import app.entity.TaskStatistic;
 import app.entity.User;
+import app.entity.ValueItem;
 import app.entity.ValueItemStatistic;
+import app.entity.ValueWay;
 import app.service.PageQuery;
 import app.service.ChannelStatisticService;
 import app.service.UserService;
@@ -38,14 +44,95 @@ public class ChannelStatisticController {
 		return "redirect:/channelstatistic";
 	}
 	
+	@PostMapping("/channelstatistic/uploadcpas")
+	public String fileUploadCpas(@RequestParam("file") MultipartFile file) throws Exception{
+		channelStatisticService.store(file);
+		System.out.println("The file path name"+file.getName());
+		return "redirect:/channelstatisticcpas";
+	}
+	
 	
 	@GetMapping("/channelstatistic")
-	public String listAllChannelStatistic(PageQuery query, Model model) {
+	public String listAllChannelStatistic(Model model) {
 		List<ChannelStatistic> allChannelStatistic = channelStatisticService.findALl();
+		List<ChannelStatistic> cpcChannelStatistic = new ArrayList<>();
+		for(ChannelStatistic cs:allChannelStatistic){
+			ValueItem vi = cs.getValueItem();
+			if(null!=vi ){
+				ValueWay vw = vi.getValueWay();
+				if(null!=vw){
+					String vwName = vw.getValueWayName();
+					if("cpc".equals(vwName))
+						cpcChannelStatistic.add(cs);
+				}
+				
+			}
+		}
+		
+		List<ChannelStatistic> channelStatistics = new ArrayList<>();
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User currentUser = (User)auth.getPrincipal();
+		if(currentUser.hasRole(Role.CHANNEL)){
+			for(ChannelStatistic cs:cpcChannelStatistic){
+				ValueItem vi = cs.getValueItem();
+				if(currentUser.getUsername().equals(vi.getChannel().getUsername()))
+						channelStatistics.add(cs);
+			}
+			allChannelStatistic = channelStatistics;
+		}else{
+			allChannelStatistic = cpcChannelStatistic;
+		}
+		
 		model.addAttribute("allChannelStatistic",allChannelStatistic);
 		return "channel_statistic/list";
 	}
 	
+	@GetMapping("/channelstatisticcpas")
+	public String listAllChannelStatisticCPAS(Model model) {
+		List<ChannelStatistic> allChannelStatistic = channelStatisticService.findALl();
+		List<ChannelStatistic> cpaChannelStatistic = new ArrayList<>();
+		for(ChannelStatistic cs:allChannelStatistic){
+			ValueItem vi = cs.getValueItem();
+			if(null!=vi ){
+				ValueWay vw = vi.getValueWay();
+				if(null!=vw){
+					String vwName = vw.getValueWayName();
+					if("cpa".equals(vwName)||"cps".equals(vwName))
+						cpaChannelStatistic.add(cs);
+				}
+				
+			}
+		}
+		
+		List<ChannelStatistic> channelStatistics = new ArrayList<>();
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User currentUser = (User)auth.getPrincipal();
+		if(currentUser.hasRole(Role.CHANNEL)){
+			for(ChannelStatistic cs:cpaChannelStatistic){
+				ValueItem vi = cs.getValueItem();
+				if(currentUser.getUsername().equals(vi.getChannel().getUsername()))
+						channelStatistics.add(cs);
+			}
+			allChannelStatistic = channelStatistics;
+		}else{
+			allChannelStatistic = cpaChannelStatistic;
+		}
+		
+		model.addAttribute("allChannelStatistic",allChannelStatistic);
+		return "channel_statistic/listcpas";
+	}
+	
+	@DeleteMapping("/channelstatistic/{id}")
+	public String delete(@PathVariable("id") Long id) {
+		channelStatisticService.delete(id);
+		return "redirect:/channelstatistic";
+	}
+	
+	@DeleteMapping("/channelstatisticcpas/{id}")
+	public String deleteCpas(@PathVariable("id") Long id) {
+		channelStatisticService.delete(id);
+		return "redirect:/channelstatisticcpas";
+	}
 	
 //	@GetMapping("/statistic")
 //	public String listAllTaskStatistic(PageQuery query, Model model) {

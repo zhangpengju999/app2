@@ -77,7 +77,7 @@
 				</div>
 			</div>
 			<div class="col-md-10">
-				<form class="form-horizontal" method="post" th:object="${webSite}">
+				<form class="form-horizontal" method="post" th:object="${webSite}" data-toggle="validator">
 					<div class="form-group">
 						<label for="webName" class="control-label col-sm-3">网站名称</label>
 						<div class="col-sm-6">
@@ -138,5 +138,6 @@
 
 	<script src="js/custom.js" th:src="@{/js/custom.js}"></script>
 	<script src="js/tables.js" th:src="@{/js/tables.js}"></script>
+	<script src="js/validator.js" th:src="@{/js/validator.js}"></script>
 </body>
 </html>

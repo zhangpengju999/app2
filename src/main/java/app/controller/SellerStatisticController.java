@@ -42,7 +42,7 @@ public class SellerStatisticController {
 	
 	
 	@GetMapping("/sellerstatistic")
-	public String listAllSellerStatistic(PageQuery query, Model model) {
+	public String listAllSellerStatistic(Model model) {
 		List<SellerStatistic> allSellerStatistic = sellerStatisticService.findALl();
 		model.addAttribute("allSellerStatistic",allSellerStatistic);
 		return "seller_statistic/list";

@@ -51,8 +51,8 @@ public class TaskController {
 	}
 	
 	@GetMapping("/tasks")
-	public String list(PageQuery query, Model model) {
-		Page<Task> tasks = taskService.findAll(query);
+	public String list(Model model) {
+		Iterable<Task> tasks = taskService.findAll();
 		model.addAttribute("tasks", tasks);
 		return "task/list";
 	}

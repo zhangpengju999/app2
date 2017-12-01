@@ -1,6 +1,7 @@
 package app.controller;
 
 import java.util.List;
+
 import java.math.BigInteger;
 
 
@@ -26,6 +27,8 @@ import app.service.PageQuery;
 import app.service.SubTaskService;
 import app.service.UserService;
 import app.service.ValueItemService;
+import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 
 @Controller
 public class UserController {
@@ -37,7 +40,7 @@ public class UserController {
 	private ValueItemService ValueItemService;
 
 	@GetMapping("/channels")
-	public String listChannels(PageQuery query, Model model) {
+	public String listChannels(Model model) {
 		List<User> users = (List<User>) userService.findAllChannel();
 		for(User user:users){
 			List<Object> valueItemCount = ValueItemService.findValueItemCountByChannelId(user.getId());
@@ -49,8 +52,8 @@ public class UserController {
 	}
 	
 	@GetMapping("/users")
-	public String list(PageQuery query, Model model) {
-		Page<User> users = userService.findAll(query);
+	public String list(Model model) {
+		Iterable<User> users = userService.findAll();
 		model.addAttribute("users", users);
 		return "user/list";
 	}
@@ -96,7 +99,7 @@ public class UserController {
 	// my profiles begin
 	
 	@GetMapping("/myprofile")
-	public String listMyProfile(PageQuery query, Model model) {
+	public String listMyProfile(Model model) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User currentUser = (User)auth.getPrincipal();
 		model.addAttribute("currentUser", currentUser);
@@ -104,7 +107,7 @@ public class UserController {
 	}
 	
 	@GetMapping("/myprofile/{id}/edit")
-	public String editMyProfile(@PathVariable("id") Long id,PageQuery query, Model model) {
+	public String editMyProfile(@PathVariable("id") Long id,Model model) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User currentUser = (User)auth.getPrincipal();
 		model.addAttribute("currentUser", currentUser);

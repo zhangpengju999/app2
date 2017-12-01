@@ -83,7 +83,7 @@
 								<th>计费方式</th>
 								<th>展现量</th>
 								<th>点击量</th>
-								<th>销售单价</th>
+								<th sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_BOSS','ROLE_ADFINANCIAL','ROLE_CHFINANCIAL')">销售单价</th>
 								<th>是否对公</th>
 								<th sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_BOSS','ROLE_OPERATOR','ROLE_ADFINANCIAL','ROLE_CHFINANCIAL')">销售方</th>
 								<th>结算周期</th>
@@ -100,7 +100,7 @@
 									 Explorer 4.0</td>
 								<td th:text="${task.valueWayId.valueWayName}"></td>
 								<td th:text="${task.showCount}"></td>
-								<td th:text="${task.clickCount}"></td>
+								<td sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_BOSS','ROLE_ADFINANCIAL','ROLE_CHFINANCIAL')" th:text="${task.clickCount}"></td>
 								<td th:text="${task.unitPrice}"></td>
 								<td th:text="${task.isPublic}"></td>
 								<td sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_BOSS','ROLE_OPERATOR','ROLE_ADFINANCIAL','ROLE_CHFINANCIAL')" th:text="${task.seller.name}"></td>
@@ -160,6 +160,6 @@
     <script src="vendors/datatables/dataTables.bootstrap.js"></script>
 
     <script src="js/custom.js" th:src="@{js/custom.js}"></script>
-    <script src="js/tables.js" th:src="@{js/tables/js}"></script>
+    <script src="js/tables.js" th:src="@{js/tables.js}"></script>
   </body>
 </html>

@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import app.entity.ChannelStatistic;
+import app.entity.DivideRate;
 import app.entity.SellerStatistic;
 import app.entity.SubTask;
 import app.entity.ValueItem;
@@ -148,8 +149,10 @@ public class SellerStatisticServiceImpl implements SellerStatisticService {
 				Date date = dateCell.getDateCellValue();
 				statistic.setDate(date);
 				
-
 				ValueWay valueWay = subTask.getParent().getValueWayId();
+				Cell clickCountCell = row.getCell(1);
+				long clicCount = Math.round(clickCountCell.getNumericCellValue());
+				statistic.setClickCount(clicCount);
 				if (valueWay.getValueWayName().equals("cps")) {
 					Cell cpsDataCell = row.getCell(2);
 					double cpsData = cpsDataCell.getNumericCellValue();
@@ -161,10 +164,6 @@ public class SellerStatisticServiceImpl implements SellerStatisticService {
 					Cell showCountCell = row.getCell(0);
 					long showCount = Math.round(showCountCell.getNumericCellValue());
 					statistic.setShowCount(showCount);
-
-					Cell clickCountCell = row.getCell(1);
-					long clicCount = Math.round(clickCountCell.getNumericCellValue());
-					statistic.setClickCount(clicCount);
 
 					double clickRate = 0;
 					if (showCount != 0)

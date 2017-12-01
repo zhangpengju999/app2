@@ -158,6 +158,9 @@ public class SellerSettleServiceImpl implements SellerSettleService {
 				
 
 				ValueWay valueWay = subTask.getParent().getValueWayId();
+				Cell clickCountCell = row.getCell(1);
+				long clicCount = Math.round(clickCountCell.getNumericCellValue());
+				sellerSettle.setClickCount(clicCount);
 				if (valueWay.getValueWayName().equals("cps")) {
 					Cell cpsDataCell = row.getCell(2);
 					double cpsData = cpsDataCell.getNumericCellValue();
@@ -169,10 +172,6 @@ public class SellerSettleServiceImpl implements SellerSettleService {
 					Cell showCountCell = row.getCell(0);
 					long showCount = Math.round(showCountCell.getNumericCellValue());
 					sellerSettle.setShowCount(showCount);
-
-					Cell clickCountCell = row.getCell(1);
-					long clicCount = Math.round(clickCountCell.getNumericCellValue());
-					sellerSettle.setClickCount(clicCount);
 
 					double clickRate = 0;
 					if (showCount != 0)

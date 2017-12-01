@@ -46,7 +46,7 @@ public class ChannelSettleController {
 	
 	
 	@GetMapping("/channelsettle")
-	public String listAllSellerStatistic(PageQuery query, Model model) {
+	public String listAllSellerStatistic(Model model) {
 		List<ChannelSettle> allChannelsettle = channelSettleService.findALl();
 		model.addAttribute("allChannelsettle",allChannelsettle);
 		return "channel_settle/list";

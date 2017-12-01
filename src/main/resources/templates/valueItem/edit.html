@@ -78,27 +78,28 @@
 				</div>
 			</div>
 			<div class="col-md-10">
-				<form class="form-horizontal" method="post" th:object="${valueItem}">
+				<form class="form-horizontal" method="post" th:object="${valueItem}" data-toggle="validator">
 					<div class="form-group">
 						<label for="itemName" class="control-label col-sm-3">计费名称</label>
 						<div class="col-sm-6">
 							<input type="text" th:field="*{itemName}" class="form-control"
-								placeholder="计费名称" required autofocus />
+								placeholder="计费名称" required autofocus name="name1"/>
 						</div>
 					</div>
 					<div class="form-group">
 						<label for="taskId" class="control-label col-sm-3">所属任务</label>
 						<div>
 			  					<p>
-			  						<select id="seller" class="selectpicker" th:field="*{seller}" >
+			  						<select id="seller" class="selectpicker" th:field="*{seller}"  name="selectSeller">
 										    <option th:each="seller : ${allSellers}" th:value="${seller.id}" th:text="${seller.name}">CPS</option>
 									 </select>
-									 <select id="task" class="selectpicker" th:field="*{task}" >
+									 <select id="task" class="selectpicker" th:field="*{task}" name="selectTask">
 										    <option value="0">--</option>
 									 </select>
-									 <select id="subTask" class="selectpicker" th:field="*{subTask}" >
+									 <select id="subTask" class="selectpicker" th:field="*{subTask}" name="selectSubTask">
 										    <option value="0">--</option>
 									 </select>
+									 <span>*请选择，不能为空！</span>
 			  					</p>
 			  			</div>
 			  		</div>
@@ -116,8 +117,18 @@
 						<label for="channelId" class="control-label col-sm-3">所属渠道</label>
 						<div>
 			  					<p>
-			  						<select class="selectpicker" th:field="*{channel.id}" >
+			  						<select class="selectpicker" th:field="*{channel.id}" name="qudao">
 										    <option th:each="channel : ${allChannels}" th:value="${channel.id}" th:text="${channel.username}">CPS</option>
+									 </select>
+			  					</p>
+			  			</div>
+			  		</div>
+			  		<div class="form-group">
+						<label for="channelId" class="control-label col-sm-3">分成比例</label>
+						<div>
+			  					<p>
+			  						<select class="selectpicker" th:field="*{divideRate.id}" name="divide">
+										    <option th:each="divideRate : ${allDivideRates}" th:value="${divideRate.id}" th:text="${divideRate.name}">CPS</option>
 									 </select>
 			  					</p>
 			  			</div>
@@ -142,7 +153,7 @@
 										</div>
 				  			</div>
 			  		</div>
-						<div class="form-group">
+						<!-- <div class="form-group">
 						<label for="valueWayId" class="control-label col-sm-3">计费方式</label>
 							<div>
 			  					<p>
@@ -151,7 +162,7 @@
 									 </select>
 			  					</p>
 			  			 	</div>
-			  			</div>
+			  			</div>-->
 						<div class="form-group">
 							<label for="clickCount" class="control-label col-sm-3">采购单价</label>
 							<div class="col-sm-6">
@@ -222,6 +233,12 @@
         parents: "#task",
         url: "[[@{/valueItems/subTask/task}]]"
     });
+	
+	jQuery('form[data-toggle="validator"] select').on('change', function(event) {
+	    event.preventDefault();
+	    jQuery(this).find('option[disabled]').remove();
+	});
 	</script>
+	<script src="js/validator.js" th:src="@{/js/validator.js}"></script>
 </body>
 </html>

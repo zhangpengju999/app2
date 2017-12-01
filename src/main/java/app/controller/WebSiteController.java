@@ -50,8 +50,8 @@ public class WebSiteController {
 	}
 	
 	@GetMapping("/webSites")
-	public String list(PageQuery query, Model model) {
-		Page<WebSite> webSites = (Page<WebSite>) WebSiteService.findAll(query);
+	public String list(Model model) {
+		Iterable<WebSite> webSites = WebSiteService.findAll();
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User currentUser = (User)auth.getPrincipal();
 		Iterable<WebSite> myWebSites = WebSiteService.findByChannelId(currentUser.getId());

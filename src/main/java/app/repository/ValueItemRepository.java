@@ -21,10 +21,10 @@ public interface ValueItemRepository extends JpaRepository<ValueItem, Long>{
     @Query(value = "select id from value_item where channel_id = :id", nativeQuery = true)
     Iterable<Object> findIdsByChannelId(@Param("id") Long id);
     
-    @Query(value = "select id from value_item where sub_task_id = :id and date(on_line_time)<=curdate() and date(down_line_time)>=curdate()", nativeQuery = true)
+    @Query(value = "select id from value_item where sub_task_id = :id and date(on_line_time)<=curdate() and (date(down_line_time)>=curdate() or down_line_time is null)", nativeQuery = true)
     Iterable<Object> findCurrentValueItemBySubTaskId(@Param("id")Long id);
     
-    @Query(value = "select id from value_item where sub_task_id = :id and date(on_line_time)<=:date and date(down_line_time)>=:date", nativeQuery = true)
+    @Query(value = "select id from value_item where sub_task_id = :id and date(on_line_time)<=:date and (date(down_line_time)>=:date or down_line_time is null)", nativeQuery = true)
     Iterable<Object> findCurrentValueItemIdBySubTaskIdAndDate(@Param("id")Long id, @Param("date")Date date);
     
     @Query(value = "select id from value_item where sub_task_id = :id and channel_id = :channelId", nativeQuery = true)

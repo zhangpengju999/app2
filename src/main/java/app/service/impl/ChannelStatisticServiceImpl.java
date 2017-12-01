@@ -1,11 +1,14 @@
 package app.service.impl;
 
+import static org.mockito.Matchers.doubleThat;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -23,7 +26,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import app.entity.ChannelStatistic;
+import app.entity.DivideRate;
 import app.entity.SubTask;
+import app.entity.Task;
 import app.entity.ValueItem;
 import app.entity.ValueWay;
 import app.repository.ChannelStatisticRepository;
@@ -135,6 +140,14 @@ public class ChannelStatisticServiceImpl implements ChannelStatisticService {
 	public List<Object[]> findAllValueItemStatistics() {
 		return channelStatisticRepository.findAllValueItemStatistics();
 	}
+	
+	@Override
+	public void delete(Long id) {
+		ChannelStatistic channelStatistic = findById(id);
+		if (channelStatistic != null) {
+			channelStatisticRepository.delete(id);
+		}
+	}
 
 	private void getValueItemFromWorkBook(Workbook workbook) {
 		Sheet sheet = workbook.getSheetAt(0);
@@ -142,71 +155,97 @@ public class ChannelStatisticServiceImpl implements ChannelStatisticService {
 		ChannelStatistic statistic = new ChannelStatistic();
 		Row row = sheet.getRow(1);
 
-		Cell subTaskNameCell = row.getCell(4);
+		Cell subTaskNameCell = row.getCell(5);
 		if (subTaskNameCell != null && subTaskNameCell.getStringCellValue() != null) {
 			String subTaskName = subTaskNameCell.getStringCellValue();
 			List<SubTask> subTasks = subTaskService.findByName(subTaskName);
 			if (subTasks != null && subTasks.size() > 0) {
 				SubTask subTask = subTasks.get(0);
-				Cell dateCell = row.getCell(3);
+				Cell dateCell = row.getCell(4);
 				Date date = dateCell.getDateCellValue();
 				ValueItem currentValueItem = valueItemService.findCurrentValueItemBySubTaskIdAndDate(subTask.getId(), date);
 				if (currentValueItem != null) {
 					statistic.setDate(date);
 					statistic.setValueItem(currentValueItem);
+					DivideRate dr = currentValueItem.getDivideRate();
 					
 					ValueWay valueWay = currentValueItem.getValueWay();
-					if(valueWay.getValueWayName().equals("cps")){
-						Cell cpsDataCell = row.getCell(2);
-						double cpsData = cpsDataCell.getNumericCellValue();
-						
-						double income = cpsData*(1-statistic.getDeductRate());
-						statistic.setIncome(income);
-					}else{
-
-					Cell showCountCell = row.getCell(0);
-					long showCount = Math.round(showCountCell.getNumericCellValue());
-					statistic.setShowCount(showCount);
-
 					Cell clickCountCell = row.getCell(1);
 					long clicCount = Math.round(clickCountCell.getNumericCellValue());
 					statistic.setClickCount(clicCount);
 					
-					double clickRate = 0;
+					if((valueWay.getValueWayName().equals("cps")||valueWay.getValueWayName().equals("cpa"))&&null!=dr){
+						Cell cpsDataCell = row.getCell(3);
+						long resultCount = Math.round(cpsDataCell.getNumericCellValue());
+						statistic.setResultCount(resultCount);
+
+						double resultRate = 0;
+						if(clicCount>0){
+							resultRate = (double)resultCount/(double)clicCount;
+						}
+						statistic.setResultRate(resultRate);
+						
+						
+						
+						double income = resultCount*currentValueItem.getPurchasePrice()*dr.getRate();
+						statistic.setIncome(income);
+						statistic.setPurchasePrice(currentValueItem.getPurchasePrice());
+					}else{
+					DecimalFormat df = new DecimalFormat("0.00");
+
+
+					Cell showCountCell = row.getCell(0);
+					long showCount = Math.round(showCountCell.getNumericCellValue());
+					statistic.setShowCount(showCount);
+					
+					double price = currentValueItem.getPurchasePrice();
+					statistic.setPurchasePrice(price);
+
+					double clickRate = 0.00;
 					if(showCount!=0)
-						clickRate = (double)clicCount/showCount;
+					{
+						clickRate = (double)100*clicCount/showCount;
+						String clickRateStr = df.format(clickRate);
+						clickRate = Double.valueOf(clickRateStr);
+						
+					}
+					
 					statistic.setClickRate(clickRate);
 
-					double purchasePrice = currentValueItem.getPurchasePrice();
-					double cpm = purchasePrice*1000;
+					double cpm = price*1000;
 					statistic.setCPM(cpm);
 					
-					double income = purchasePrice*clicCount*(1-statistic.getDeductRate());
+					Cell incomeCell = row.getCell(3);
+					double income = incomeCell.getNumericCellValue();
 					statistic.setIncome(income);
-
-					create(statistic);
 					
-					// switch (showCountCell.getCellTypeEnum()){
-					// case STRING:
-					// statistic.setShowCount(Long.valueOf(showCountCell.getRichStringCellValue().getString()));
-					// case
-					// NUMERIC:statistic.setShowCount(Math.round(showCountCell.getNumericCellValue()));
-					// default: statistic.setShowCount(new Long(0));
-					// }
-					
-					// switch (incomeCell.getCellTypeEnum()){
-					// case STRING:
-					// statistic.setIncome(Double.valueOf(incomeCell.getRichStringCellValue().getString()));
-					// case
-					// NUMERIC:statistic.setIncome(incomeCell.getNumericCellValue());
-					// default: statistic.setIncome(new Double(0));
-					// }
-					// switch (dateCell.getCellTypeEnum()){
-					// case
-					// NUMERIC:statistic.setDate(dateCell.getDateCellValue());
-					// default: statistic.setDate(new Date());
-					// }
+					Cell appCell = row.getCell(6);
+					appCell.setCellType(Cell.CELL_TYPE_STRING);
+					if(null!=appCell&&null!=appCell.getStringCellValue()){
+						statistic.setAppName(appCell.getStringCellValue());
 					}
+					
+					Cell adverCell = row.getCell(7);
+					adverCell.setCellType(Cell.CELL_TYPE_STRING);
+					if(null!=adverCell&&null!=adverCell.getStringCellValue()){
+						statistic.setAdverName(adverCell.getStringCellValue());
+					}
+					
+					double fillRate = 0.00;
+					Cell fillRateCell = row.getCell(8);
+					if(null!=fillRateCell){
+						double rate = 100*fillRateCell.getNumericCellValue();
+						String fillRateStr = df.format(rate);
+						fillRate = Double.valueOf(fillRateStr);
+					}
+					statistic.setFillRate(fillRate);
+					
+					Cell ecmpCell = row.getCell(2);
+					if(null!=ecmpCell){
+						statistic.setEcmp(ecmpCell.getNumericCellValue());
+					}
+					}
+					create(statistic);
 				}
 			}
 		}

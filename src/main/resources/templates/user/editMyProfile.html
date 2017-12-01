@@ -78,7 +78,7 @@
 				</div>
 			</div>
 			<div class="col-md-10">
-				<form class="form-horizontal" method="post" th:object="${currentUser}">
+				<form class="form-horizontal" method="post" th:object="${currentUser}" data-toggle="validator">
 					<div class="form-group">
 						<label for="taskName" class="control-label col-sm-3">用户名</label>
 						<div class="col-sm-6">
@@ -177,5 +177,6 @@
 	<script src="js/tables.js" th:src="@{/js/tables.js}"></script>
 	<script src="js/bootstrap-datepicker.min.js" th:src="@{/js/bootstrap-datepicker.min.js}"></script>
 	<script src="js/bootstrap-datepicker.pt-BR.min.js" th:src="@{/js/bootstrap-datepicker.pt-BR.min.js}"></script>
+	<script src="js/validator.js" th:src="@{/js/validator.js}"></script>
 </body>
 </html>

@@ -46,6 +46,28 @@ public class ChannelSettle {
 	
 	@Column(name="deduct_rate")
 	double deductRate=0.2;
+	
+	@Column(name="result_count")
+	Long resultCount;
+	
+	@Column(name="result_rate")
+	double resultRate;
+	
+	public double getResultRate() {
+		return resultRate;
+	}
+
+	public void setResultRate(double resultRate) {
+		this.resultRate = resultRate;
+	}
+
+	public Long getResultCount() {
+		return resultCount;
+	}
+
+	public void setResultCount(Long resultCount) {
+		this.resultCount = resultCount;
+	}
 
 	public Long getId() {
 		return id;

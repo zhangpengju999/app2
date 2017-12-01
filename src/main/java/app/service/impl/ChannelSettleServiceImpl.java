@@ -24,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import app.entity.ChannelSettle;
 import app.entity.ChannelStatistic;
+import app.entity.DivideRate;
 import app.entity.SubTask;
 import app.entity.ValueItem;
 import app.entity.ValueWay;
@@ -150,6 +151,7 @@ public class ChannelSettleServiceImpl implements ChannelSettleService {
 				ValueItem currentValueItem = valueItemService.findCurrentValueItemBySubTaskIdAndChannelName(subTask.getId(), channelName);
 				if (currentValueItem != null) {
 					channelSettle.setValueItem(currentValueItem);
+					DivideRate dr = currentValueItem.getDivideRate();
 					
 					Cell yearCell = row.getCell(3);
 					long year =  Math.round(yearCell.getNumericCellValue());
@@ -160,21 +162,23 @@ public class ChannelSettleServiceImpl implements ChannelSettleService {
 					channelSettle.setMonth(month);
 					
 					ValueWay valueWay = currentValueItem.getValueWay();
-					if(valueWay.getValueWayName().equals("cps")){
+					Cell clickCountCell = row.getCell(1);
+					long clicCount = Math.round(clickCountCell.getNumericCellValue());
+					channelSettle.setClickCount(clicCount);
+					if((valueWay.getValueWayName().equals("cps")||valueWay.getValueWayName().equals("cpa"))&&null!=dr){
 						Cell cpsDataCell = row.getCell(2);
-						double cpsData = cpsDataCell.getNumericCellValue();
+						long resultCount = Math.round(cpsDataCell.getNumericCellValue());
+						channelSettle.setResultCount(resultCount);
+
+						channelSettle.setResultRate(clicCount==0?0:resultCount/clicCount);
 						
-						double income = cpsData*(1-channelSettle.getDeductRate());
+						double income = resultCount*currentValueItem.getPurchasePrice()*dr.getRate();
 						channelSettle.setIncome(income);
 					}else{
 
 					Cell showCountCell = row.getCell(0);
 					long showCount = Math.round(showCountCell.getNumericCellValue());
 					channelSettle.setShowCount(showCount);
-
-					Cell clickCountCell = row.getCell(1);
-					long clicCount = Math.round(clickCountCell.getNumericCellValue());
-					channelSettle.setClickCount(clicCount);
 					
 					double clickRate = 0;
 					if(showCount!=0)
@@ -187,30 +191,8 @@ public class ChannelSettleServiceImpl implements ChannelSettleService {
 					
 					double income = purchasePrice*clicCount*(1-channelSettle.getDeductRate());
 					channelSettle.setIncome(income);
-
-					create(channelSettle);
-					
-					// switch (showCountCell.getCellTypeEnum()){
-					// case STRING:
-					// statistic.setShowCount(Long.valueOf(showCountCell.getRichStringCellValue().getString()));
-					// case
-					// NUMERIC:statistic.setShowCount(Math.round(showCountCell.getNumericCellValue()));
-					// default: statistic.setShowCount(new Long(0));
-					// }
-					
-					// switch (incomeCell.getCellTypeEnum()){
-					// case STRING:
-					// statistic.setIncome(Double.valueOf(incomeCell.getRichStringCellValue().getString()));
-					// case
-					// NUMERIC:statistic.setIncome(incomeCell.getNumericCellValue());
-					// default: statistic.setIncome(new Double(0));
-					// }
-					// switch (dateCell.getCellTypeEnum()){
-					// case
-					// NUMERIC:statistic.setDate(dateCell.getDateCellValue());
-					// default: statistic.setDate(new Date());
-					// }
 					}
+					create(channelSettle);
 				}
 			}
 		}

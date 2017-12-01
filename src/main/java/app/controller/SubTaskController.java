@@ -69,8 +69,8 @@ public class SubTaskController {
 	}
 	
 	@GetMapping("/subTasks")
-	public String list(PageQuery query, Model model) {
-		Page<SubTask> subTasks = (Page<SubTask>) subTaskService.findAll(query);
+	public String list(Model model) {
+		Iterable<SubTask> subTasks = subTaskService.findAll();
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User currentUser = (User)auth.getPrincipal();
 		//Iterable<ValueItem> myValueItems = subTaskService.findByChannelId(currentUser.getId());

@@ -77,7 +77,7 @@
 				</div>
 			</div>
 			<div class="col-md-10">
-				<form class="form-horizontal" method="post" th:object="${task}">
+				<form class="form-horizontal" method="post" th:object="${task}" data-toggle="validator">
 					<div class="form-group">
 						<label for="taskName" class="control-label col-sm-3">任务名</label>
 						<div class="col-sm-6">
@@ -95,6 +95,7 @@
 			  					</p>
 			  			</div>
 			  		</div>
+			  		
 			  			<div class="form-group">
 							<label for="showCount" class="control-label col-sm-3">展现量</label>
 							<div class="col-sm-6">
@@ -196,5 +197,6 @@
 
 	<script src="js/custom.js" th:src="@{/js/custom.js}"></script>
 	<script src="js/tables.js" th:src="@{/js/tables.js}"></script>
+	<script src="js/validator.js" th:src="@{/js/validator.js}"></script>
 </body>
 </html>

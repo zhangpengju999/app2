@@ -44,7 +44,7 @@ public class SellerSettleController {
 	
 	
 	@GetMapping("/sellersettle")
-	public String listAllSellerStatistic(PageQuery query, Model model) {
+	public String listAllSellerStatistic(Model model) {
 		List<SellerSettle> allSellerSettle = sellerSettleService.findALl();
 		model.addAttribute("allSellerSettle",allSellerSettle);
 		return "seller_settle/list";

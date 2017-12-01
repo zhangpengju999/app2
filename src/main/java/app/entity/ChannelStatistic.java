@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -19,7 +20,7 @@ public class ChannelStatistic {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 	
-	@ManyToOne(optional = false)
+	@ManyToOne(optional = false,fetch=FetchType.LAZY)
     @JoinColumn(name = "value_item_id", referencedColumnName = "id")
 	ValueItem valueItem;
 	
@@ -43,6 +44,85 @@ public class ChannelStatistic {
 	
 	@Column(name="deduct_rate")
 	double deductRate=0.2;
+	
+	@Column(name="result_count")
+	Long resultCount;
+	
+	@Column(name="result_rate")
+	double resultRate;
+	
+	@Column(name="purchase_price")
+	double purchasePrice;
+	
+	@Column(name="app_name")
+	String appName;
+	
+	@Column(name="adver_name")
+	String adverName;
+	
+	@Column(name="fill_rate")
+	double fillRate;
+	
+	@Column(name="ecmp")
+	double ecmp;
+	
+	
+	
+	public String getAppName() {
+		return appName;
+	}
+
+	public void setAppName(String appName) {
+		this.appName = appName;
+	}
+
+	public String getAdverName() {
+		return adverName;
+	}
+
+	public void setAdverName(String adverName) {
+		this.adverName = adverName;
+	}
+
+	public double getFillRate() {
+		return fillRate;
+	}
+
+	public void setFillRate(double fillRate) {
+		this.fillRate = fillRate;
+	}
+
+	public double getEcmp() {
+		return ecmp;
+	}
+
+	public void setEcmp(double ecmp) {
+		this.ecmp = ecmp;
+	}
+
+	public double getPurchasePrice() {
+		return purchasePrice;
+	}
+
+	public void setPurchasePrice(double purchasePrice) {
+		this.purchasePrice = purchasePrice;
+	}
+
+	public double getResultRate() {
+		return resultRate;
+	}
+
+	public void setResultRate(double resultRate) {
+		this.resultRate = resultRate;
+	}
+
+	public Long getResultCount() {
+		return resultCount;
+	}
+
+	public void setResultCount(Long resultCount) {
+		this.resultCount = resultCount;
+	}
 
 	public Long getId() {
 		return id;

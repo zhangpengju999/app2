@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import app.entity.DivideRate;
 import app.entity.Role;
 import app.entity.Seller;
 import app.entity.SubTask;
@@ -34,6 +35,7 @@ import app.entity.User;
 import app.entity.ValueItem;
 import app.entity.ValueWay;
 import app.entity.WebSite;
+import app.service.DivideRateService;
 import app.service.PageQuery;
 import app.service.SellerService;
 import app.service.SubTaskService;
@@ -42,6 +44,7 @@ import app.service.UserService;
 import app.service.ValueItemService;
 import app.service.ValueWayService;
 import app.service.WebSiteService;
+import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -56,6 +59,7 @@ public class ValueItemController {
 	@Inject SellerService sellerService;
 	@Inject SubTaskService subTaskService;
 	@Inject ValueWayService valueWayService;
+	@Inject DivideRateService divideRateService;
 
 	@ModelAttribute("allTasks")
     public List<Task> populateTasks() {
@@ -84,6 +88,12 @@ public class ValueItemController {
 	public List<User> populateChannels(){
 		List<User> allChannels = (List<User>) userService.findAllChannel();
 		return  allChannels;
+	}
+	
+	@ModelAttribute("allDivideRates")
+	public List<DivideRate> populateDivideRates(){
+		List<DivideRate> allDivideRates = (List<DivideRate>) divideRateService.getAll();
+		return  allDivideRates;
 	}
 	
 	@ModelAttribute("allValueWays")
@@ -120,7 +130,7 @@ public class ValueItemController {
 	}
 	
 	@GetMapping("/valueItems")
-	public String list(PageQuery query, Model model) {
+	public String list(Model model) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User currentUser = (User)auth.getPrincipal();
 		Iterable<ValueItem> valueItems;
@@ -152,10 +162,16 @@ public class ValueItemController {
 	@PostMapping("/valueItems/new")
 	public String create(@Valid @ModelAttribute("valueItem") ValueItem valueItem, BindingResult bindingResult, Model model) {
 		if (!bindingResult.hasErrors()) {
+			if(null==valueItem.getTask()||null==valueItem.getSubTask()){
+				return "redirect:/valueItems";
+			}
 			if(valueItem.getChannel()==null){
 				Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 				User currentUser = (User)auth.getPrincipal();
 				valueItem.setChannel(currentUser);
+			}
+			if(null==valueItem.getValueWay()){
+				valueItem.setValueWay(valueItem.getTask().getValueWayId());
 			}
 			valueItemService.create(valueItem, bindingResult);
 			if (!bindingResult.hasErrors())
@@ -178,6 +194,19 @@ public class ValueItemController {
 	@PostMapping("/valueItems/{id}/edit")
 	public String edit(@PathVariable("id") Long id, @Valid @ModelAttribute("valueItem") ValueItem valueItem, BindingResult bindingResult, Model model) {
 		if (!bindingResult.hasErrors()) {
+			Iterable<ValueItem> all = valueItemService.findAll();
+			ValueItem exist = valueItemService.findById(id);
+			if(null==valueItem.getTask() || null == valueItem.getSubTask()){
+				valueItem.setSubTask(exist.getSubTask());
+				valueItem.setTask(exist.getSubTask().getParent());
+				
+			}
+			if(valueItem.getChannel()==null){
+				valueItem.setChannel(exist.getChannel());
+			}
+			if(null==valueItem.getValueWay()){
+				valueItem.setValueWay(exist.getSubTask().getParent().getValueWayId());
+			}
 			valueItemService.update(id, valueItem, bindingResult);
 			if (!bindingResult.hasErrors())
 				return "redirect:/valueItems";
@@ -191,6 +220,7 @@ public class ValueItemController {
 
 	@DeleteMapping("/valueItems/{id}")
 	public String delete(@PathVariable("id") Long id) {
+		valueItemService.findAll();
 		valueItemService.delete(id);
 		return "redirect:/valueItems";
 	}

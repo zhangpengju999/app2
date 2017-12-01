@@ -73,47 +73,54 @@
 
   			<div class="content-box-large">
   				<div class="panel-heading">
-					<div class="panel-title">销售方预估表</div>
+					<div class="panel-title">渠道预估表CPACPS</div>
 				</div>
   				<div class="panel-body">
   					<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="example">
 						<thead>
 							<tr>
-								<th>销售方名称</th>
+								<th>渠道名称</th>
 								<th>产品名称</th>
-								<th>子任务名称</th>
 								<th>计费方式</th>
-								<th>销售单价</th>
-								<th>展现量</th>
+								<th>系统</th>
+								<th sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_BOSS'">销售单价</th>
 								<th>点击量</th>
-								<th>点击率</th>
+								<th>效果</th>
+								<th>转化率</th>
 								<th>收入</th>
-								<th>千次收入</th>
-								<th>核减比例</th>
 								<th>数据日期</th>
+								<th sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_BOSS','ROLE_OPERATOR')">操作</th>
 							</tr>
 						</thead>
 						<tbody>
-							<tr class="odd gradeX" th:each="sellerStatistic : ${allSellerStatistic}">
-								<td th:text="${sellerStatistic.subTask?.parent?.seller?.name}"></td>
-								<td th:text="${sellerStatistic.subTask?.parent?.taskName}">Internet
+							<tr class="odd gradeX" th:each="channelStatistic : ${allChannelStatistic}">
+								<td th:text="${channelStatistic.valueItem?.channel?.username}"></td>
+								<td th:text="${channelStatistic.valueItem?.subTask?.name}">Internet
 									 Explorer 4.0</td>
 								
-								<td th:text="${sellerStatistic.subTask?.name}"></td>
-								<td th:text="${sellerStatistic.subTask?.parent?.valueWayId?.valueWayName}"></td>
-								<td th:text="${sellerStatistic.subTask?.parent?.unitPrice}"></td>
-								<td th:text="${sellerStatistic.showCount}"></td>
-								<td th:text="${sellerStatistic.clickCount}"></td>
-								<td th:text="${sellerStatistic.clickRate}"></td>
-								<td th:text="${sellerStatistic.income}"></td>
-								<td th:text="${sellerStatistic.CPM}"></td>
-								<td th:text="${sellerStatistic.checkReduceRate}"></td>
-								<td th:text="${sellerStatistic.date}"></td>
+								<td th:text="${channelStatistic.valueItem?.valueWay?.valueWayName}"></td>
+								<td th:text="${channelStatistic.valueItem?.subTask?.parent?.system}">Internet
+									 Explorer 4.0</td>
+								<td sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_BOSS'" th:text="${channelStatistic.purchasePrice}"></td>
+								<td th:text="${channelStatistic.clickCount}"></td>
+								<td th:text="${channelStatistic.resultCount}"></td>
+								<td th:text="${channelStatistic.resultRate}"></td>
+								<td th:text="${channelStatistic.income}"></td>
+								<td th:text="${channelStatistic.date}"></td>
+								<td class="center" sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_BOSS','ROLE_OPERATOR')">
+									<ul class="list-inline">
+										<li>
+											<form class="form-inline" th:method="delete" onClick="return confirm('确认要删除？')" th:action="@{/channelstatisticcpas/{id}(id=${channelStatistic.id})}">
+												<button class="btn btn-xs btn-danger">删除</button>
+											</form>
+										</li>
+									</ul>
+								</td>
 							</tr>
 						</tbody>
 					</table>
 					<div sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_BOSS','ROLE_OPERATOR')">
-						<form class="form-inline" th:method="post" enctype="multipart/form-data"  th:action="@{/sellerstatistic/upload}">
+						<form class="form-inline" th:method="post" enctype="multipart/form-data"  th:action="@{/channelstatistic/uploadcpas}">
 												<table>
 													<tr><td>选择Excel文件:</td><td><input type="file" name="file" accept=".xls,.xlsx"/></td></tr>
 													<tr><td></td><td><input type="submit" value="上传" /></td></tr>

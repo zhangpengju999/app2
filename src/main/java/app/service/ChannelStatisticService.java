@@ -23,4 +23,6 @@ public interface ChannelStatisticService {
 	List<Object[]> findAllValueItemStatistics();
 	
 	List<ChannelStatistic> findALl();
+	
+	void delete(Long id);
 }

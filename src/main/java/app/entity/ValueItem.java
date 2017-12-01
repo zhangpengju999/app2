@@ -28,6 +28,10 @@ public class ValueItem {
     private User channel;
     
     @ManyToOne(optional = false)
+    @JoinColumn(name = "divide_rate", referencedColumnName = "id")
+    private DivideRate divideRate;
+    
+    @ManyToOne(optional = false)
     @JoinColumn(name = "value_way_id", referencedColumnName = "id")
     private ValueWay valueWay;
 
@@ -138,6 +142,12 @@ public class ValueItem {
 	}
 	public void setTask(Task task) {
 		this.task = task;
+	}
+	public DivideRate getDivideRate() {
+		return divideRate;
+	}
+	public void setDivideRate(DivideRate divideRate) {
+		this.divideRate = divideRate;
 	}
     
     

@@ -49,7 +49,7 @@ public class SellerController {
 	}
 	
 	@GetMapping("/sellers")
-	public String list(PageQuery query, Model model) {
+	public String list(Model model) {
 		Iterable<Seller> sellers = sellerService.findAll();
 		for(Seller seller:sellers){
 			List<Object> countList = taskService.findTaskCountBySellerId(seller.getId());
