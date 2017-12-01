@@ -10,6 +10,7 @@ import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -57,7 +58,10 @@ public class ChannelStatisticServiceImpl implements ChannelStatisticService {
 
 	@Override
 	@Transactional
-	public ChannelStatistic create(ChannelStatistic statistic) {
+	public void create(List<ChannelStatistic> statistics) {
+		
+		List<ChannelStatistic> needList = new ArrayList<>();
+		for(ChannelStatistic statistic:statistics){
 		Date date = statistic.getDate();
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 		List<Object[]> exist = channelStatisticRepository.findByvalueItemIdAndDate(statistic.getValueItem().getId(),
@@ -65,9 +69,12 @@ public class ChannelStatisticServiceImpl implements ChannelStatisticService {
 		if (exist != null && exist.size() > 0) {
 
 		} else {
-			channelStatisticRepository.save(statistic);
+			needList.add(statistic);
 		}
-		return statistic;
+		}
+		if(needList.size()>0){
+			channelStatisticRepository.save(needList);
+		}
 	}
 
 	@Override
@@ -151,10 +158,11 @@ public class ChannelStatisticServiceImpl implements ChannelStatisticService {
 
 	private void getValueItemFromWorkBook(Workbook workbook) {
 		Sheet sheet = workbook.getSheetAt(0);
-
-		ChannelStatistic statistic = new ChannelStatistic();
-		Row row = sheet.getRow(1);
-
+		int lastRowNum = sheet.getLastRowNum();
+		List<ChannelStatistic> statisticList = new ArrayList<>();
+		for(int i=0;i<lastRowNum;i++){
+		
+		Row row = sheet.getRow(i);
 		Cell subTaskNameCell = row.getCell(5);
 		if (subTaskNameCell != null && subTaskNameCell.getStringCellValue() != null) {
 			String subTaskName = subTaskNameCell.getStringCellValue();
@@ -164,6 +172,7 @@ public class ChannelStatisticServiceImpl implements ChannelStatisticService {
 				Cell dateCell = row.getCell(4);
 				Date date = dateCell.getDateCellValue();
 				ValueItem currentValueItem = valueItemService.findCurrentValueItemBySubTaskIdAndDate(subTask.getId(), date);
+				ChannelStatistic statistic = new ChannelStatistic();
 				if (currentValueItem != null) {
 					statistic.setDate(date);
 					statistic.setValueItem(currentValueItem);
@@ -245,10 +254,15 @@ public class ChannelStatisticServiceImpl implements ChannelStatisticService {
 						statistic.setEcmp(ecmpCell.getNumericCellValue());
 					}
 					}
-					create(statistic);
+					if(null!=statistic.getValueItem()){
+						statisticList.add(statistic);
+					}
 				}
 			}
 		}
+		}
+		create(statisticList);
+		
 	}
 
 }

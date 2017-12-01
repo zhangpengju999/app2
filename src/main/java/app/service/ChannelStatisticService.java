@@ -10,7 +10,7 @@ public interface ChannelStatisticService {
 
 	ChannelStatistic findById(Long id);
 	
-	ChannelStatistic create(ChannelStatistic statistic);
+	void create(List<ChannelStatistic> statistics);
 	
 	void store(MultipartFile file) throws Exception;
 	
