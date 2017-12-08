@@ -83,7 +83,7 @@
 								<th>产品名称</th>
 								<th>计费方式</th>
 								<th>系统</th>
-								<th sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_BOSS'">销售单价</th>
+								<th sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_BOSS','ROLE_CHANNEL')">销售单价</th>
 								<th>点击量</th>
 								<th>效果</th>
 								<th>转化率</th>
@@ -101,10 +101,10 @@
 								<td th:text="${channelStatistic.valueItem?.valueWay?.valueWayName}"></td>
 								<td th:text="${channelStatistic.valueItem?.subTask?.parent?.system}">Internet
 									 Explorer 4.0</td>
-								<td sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_BOSS'" th:text="${channelStatistic.purchasePrice}"></td>
+								<td sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_BOSS','ROLE_CHANNEL')" th:text="${channelStatistic.purchasePrice}"></td>
 								<td th:text="${channelStatistic.clickCount}"></td>
 								<td th:text="${channelStatistic.resultCount}"></td>
-								<td th:text="${channelStatistic.resultRate}"></td>
+								<td th:text="${channelStatistic.convertRate}"></td>
 								<td th:text="${channelStatistic.income}"></td>
 								<td th:text="${channelStatistic.date}"></td>
 								<td class="center" sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_BOSS','ROLE_OPERATOR')">

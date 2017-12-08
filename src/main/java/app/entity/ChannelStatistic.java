@@ -66,8 +66,19 @@ public class ChannelStatistic {
 	@Column(name="ecmp")
 	double ecmp;
 	
+	@Column(name="convert_rate")
+	String convertRate;
 	
 	
+	
+	public String getConvertRate() {
+		return convertRate;
+	}
+
+	public void setConvertRate(String convertRate) {
+		this.convertRate = convertRate;
+	}
+
 	public String getAppName() {
 		return appName;
 	}

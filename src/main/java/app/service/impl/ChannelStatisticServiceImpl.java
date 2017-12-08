@@ -160,7 +160,7 @@ public class ChannelStatisticServiceImpl implements ChannelStatisticService {
 		Sheet sheet = workbook.getSheetAt(0);
 		int lastRowNum = sheet.getLastRowNum();
 		List<ChannelStatistic> statisticList = new ArrayList<>();
-		for(int i=0;i<lastRowNum;i++){
+		for(int i=0;i<=lastRowNum;i++){
 		
 		Row row = sheet.getRow(i);
 		Cell subTaskNameCell = row.getCell(5);
@@ -189,10 +189,15 @@ public class ChannelStatisticServiceImpl implements ChannelStatisticService {
 						statistic.setResultCount(resultCount);
 
 						double resultRate = 0;
+						String convertRate = "0.00000%";
 						if(clicCount>0){
 							resultRate = (double)resultCount/(double)clicCount;
+							resultRate = 100*resultRate;
+							DecimalFormat df = new DecimalFormat("0.00000");
+							convertRate = df.format(resultRate);
 						}
 						statistic.setResultRate(resultRate);
+						statistic.setConvertRate(convertRate);
 						
 						
 						
