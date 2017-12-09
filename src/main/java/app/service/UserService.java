@@ -25,6 +25,6 @@ public interface UserService {
 
 	User update(Long id, User user, BindingResult bindingResult);
 
-	User delete(Long id);
+	void delete(Long id);
 
 }

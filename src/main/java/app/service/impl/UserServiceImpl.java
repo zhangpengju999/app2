@@ -145,13 +145,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	}
 
 	@Override
-	public User delete(Long id) {
+	public void delete(Long id) {
 		User user = findById(id);
 		if (user != null) {
-			user.setEnabled(false);
-			userRepository.save(user);
+			userRepository.deleteUserById(id);
 		}
-		return user;
 	}
 
 }
