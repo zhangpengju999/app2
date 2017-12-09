@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.swing.text.DateFormatter;
 import javax.transaction.Transactional;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -175,6 +176,10 @@ public class ChannelStatisticServiceImpl implements ChannelStatisticService {
 				ChannelStatistic statistic = new ChannelStatistic();
 				if (currentValueItem != null) {
 					statistic.setDate(date);
+					DateFormat datef = new SimpleDateFormat("yyyy-MM-dd");
+					String dateStr = datef.format(date);
+					statistic.setDateStr(dateStr);
+					
 					statistic.setValueItem(currentValueItem);
 					DivideRate dr = currentValueItem.getDivideRate();
 					
@@ -195,6 +200,7 @@ public class ChannelStatisticServiceImpl implements ChannelStatisticService {
 							resultRate = 100*resultRate;
 							DecimalFormat df = new DecimalFormat("0.00000");
 							convertRate = df.format(resultRate);
+							convertRate=convertRate+"%";
 						}
 						statistic.setResultRate(resultRate);
 						statistic.setConvertRate(convertRate);

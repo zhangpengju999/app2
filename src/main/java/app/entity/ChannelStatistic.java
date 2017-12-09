@@ -69,8 +69,19 @@ public class ChannelStatistic {
 	@Column(name="convert_rate")
 	String convertRate;
 	
+	@Column(name="date_str")
+	String dateStr;
 	
 	
+	
+	public String getDateStr() {
+		return dateStr;
+	}
+
+	public void setDateStr(String dateStr) {
+		this.dateStr = dateStr;
+	}
+
 	public String getConvertRate() {
 		return convertRate;
 	}
