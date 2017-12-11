@@ -180,6 +180,12 @@ public class User implements UserDetails {
 			authorities = new HashSet<>();
 		authorities.add(new Authority(this, role));
 	}
+	
+	public void deleteRole(Role role) {
+		if (null!=authorities && authorities.size()>0){
+			authorities.remove(new Authority(this,role));
+		}
+	}
 
 	public List<String> getRoles() {
 		return roles;

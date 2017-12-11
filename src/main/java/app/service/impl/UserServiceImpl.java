@@ -1,9 +1,11 @@
 package app.service.impl;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
+import app.entity.Authority;
 import app.entity.Role;
 import app.entity.User;
 import app.repository.UserRepository;
@@ -119,29 +122,90 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 		}
 		return userRepository.save(newUser);
 	}
+	
+	public User createLocal(User user, BindingResult bindingResult) {
+		// TODO 检查用户名
+		User newUser = userRepository.findByUsername(user.getUsername());
+		if(newUser == null){
+			newUser = new User();
+		}
+		newUser.setUsername(user.getUsername());
+		newUser.setPassword(user.getPassword());
+		newUser.setRealname(user.getRealname());
+		newUser.setPassed(true);
+		newUser.setBank(user.getBank());
+		newUser.setBankCard(user.getBankCard());
+		newUser.setEmail(user.getEmail());
+		newUser.setIsPublic(user.getIsPublic());
+		newUser.setPhoneNum(user.getPhoneNum());
+		newUser.setEnabled(true);
+		List<String> roles = user.getRoles();
+		if (roles != null && roles.size() > 0) {
+			for (String r : roles) {
+				Role role;
+				try {
+					role = Role.parse(r);
+				} catch (IllegalArgumentException e) {
+					continue;
+				}
+				newUser.addRole(role);
+			}
+		} else {
+			//newUser.addRole(Role.CHANNEL);
+		}
+		return userRepository.save(newUser);
+	}
 
+	@Transactional
 	@Override
 	public User update(Long id, User user, BindingResult bindingResult) {
 		// TODO 检查用户名
 		User existedUser = findById(id);
-		if (user.getPassword() != null)
-			existedUser.setPassword(passwordEncoder.encode(user.getPassword()));
+		if (user.getPassword() != null&&user.getPassword().length()>0)
+			{existedUser.setPassword(passwordEncoder.encode(user.getPassword()));
+			user.setPassword(passwordEncoder.encode(user.getPassword()));}
+		else
+			user.setPassword(existedUser.getPassword());
+		
 		if (user.getUsername() != null)
 			existedUser.setUsername(user.getUsername());
+		else
+			user.setUsername(existedUser.getUsername());
+		
 		if (user.getRealname() != null)
 			existedUser.setRealname(user.getRealname());
+		else
+			user.setRealname(existedUser.getRealname());
+		
 		if(user.getBank() != null)
 			existedUser.setBank(user.getBank());
+		else
+			user.setBank(existedUser.getBank());
+		
 		if(user.getBankCard() != null)
 			existedUser.setBankCard(user.getBankCard());
+		else
+			user.setBankCard(existedUser.getBankCard());
+		
 		if(user.getEmail() != null)
 			existedUser.setEmail(user.getEmail());
+		else
+			user.setEmail(existedUser.getEmail());
+		
 		existedUser.setIsPublic(user.getIsPublic());
+		
 		if(user.getPhoneNum() != null)
 			existedUser.setPhoneNum(user.getPhoneNum());
-		if(user.getRealname() != null)
-			existedUser.setRealname(user.getRealname());
-		return userRepository.save(existedUser);
+		else
+			user.setPhoneNum(existedUser.getPhoneNum());
+		
+		List<String> roles = user.getRoles();
+		if (roles != null && roles.size() > 0) {
+			delete(id);
+			return createLocal(user, bindingResult);
+		}else{
+			return userRepository.save(existedUser);
+		}
 	}
 
 	@Override

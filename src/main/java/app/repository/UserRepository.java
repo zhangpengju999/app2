@@ -31,5 +31,9 @@ public interface UserRepository extends PagingAndSortingRepository<User, String>
 	@Modifying
 	@Query(value="delete from users where id = :id",nativeQuery=true)
 	void deleteUserById(@Param("id") Long id);
+	
+//	@Modifying
+//	@Query(value="delete from authorities where user_id = :id",nativeQuery=true)
+//	void deleteAuthoritiesByUserId(@Param("id") Long id);
 
 }
